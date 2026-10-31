@@ -45,3 +45,9 @@ Redis ke bina site dikhegi, par leads aur admin changes save nahi honge.
 ## Admin login on/off
 
 Abhi admin login **band** hai (`/admin` seedha khulta hai). Login wapas chalu karne ke liye host par environment variable `ADMIN_REQUIRE_LOGIN=1` set karo (Vercel: Settings > Environment Variables) aur redeploy karo. Tab demo login `admin` / `admin123` kaam karega; Settings > Account & Login se badal lo.
+
+## Demo mode (default)
+
+Abhi `/admin` **demo mode** mein hai: login box mein `admin` / `admin123` pehle se bhare rehte hain, bas "Sign in" dabao. Panel sample leads ke saath browser mein hi chalta hai, koi server ya database nahi chahiye, aur changes sirf us browser mein rehte hain.
+
+Asli server login aur database wala admin chahiye to build ke time environment variable `VITE_REAL_ADMIN=1` set karo (Vercel: Settings > Environment Variables) aur redeploy karo. Tab Upstash Redis aur `ADMIN_REQUIRE_LOGIN=1` bhi lagega (upar ke sections dekho).

@@ -1,8 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
+import { DEMO_ADMIN } from './config.js'
+import { demoSaveLead } from './demo.js'
 
 const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2, 10))
 
 async function put(id, body) {
+  if (DEMO_ADMIN) {
+    // Demo: the lead appears in the demo admin panel of this browser. A real server call is attempted too but never blocks.
+    demoSaveLead(id, body)
+    fetch(`/api/leads/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), keepalive: true }).catch(() => {})
+    return true
+  }
   const r = await fetch(`/api/leads/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

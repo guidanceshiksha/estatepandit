@@ -1,7 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { defaults } from './data.js'
+import { DEMO_ADMIN } from './config.js'
+import { demoContentSaved } from './demo.js'
 
-export const merge = (saved) => Object.fromEntries(Object.keys(defaults).map((k) => [k, { ...defaults[k], ...((saved && saved[k]) || {}) }]))
+export const merge = (saved) => {
+  const all = DEMO_ADMIN ? { ...(saved || {}), ...demoContentSaved() } : saved // demo edits made in /admin win
+  return Object.fromEntries(Object.keys(defaults).map((k) => [k, { ...defaults[k], ...((all && all[k]) || {}) }]))
+}
 
 const Ctx = createContext(merge())
 export const useContent = () => useContext(Ctx)

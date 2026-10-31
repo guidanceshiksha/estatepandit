@@ -1,6 +1,30 @@
+import { DEMO_ADMIN } from '../config.js'
+import { defaults } from '../data.js'
+import { demoLeads, demoPatchLead, demoDeleteLead, demoSetContent, demoResetContent, demoContentSaved } from '../demo.js'
+
 export const TOKEN_KEY = 'pe_admin_token'
 
+// Demo mode answers every admin request from the browser's own demo store.
+function demoCall(path, opts) {
+  const method = (opts.method || 'GET').toUpperCase()
+  const body = opts.body ? JSON.parse(opts.body) : {}
+  const parts = path.split('/').filter(Boolean) // ['api','admin',...]
+  const sub = parts[2]
+  if (sub === 'me') return { demo: false, open: false, sandbox: true, user: 'admin' }
+  if (sub === 'leads' && !parts[3]) return { leads: demoLeads() }
+  if (sub === 'leads' && method === 'PATCH') return { lead: demoPatchLead(parts[3], body) }
+  if (sub === 'leads' && method === 'DELETE') { demoDeleteLead(parts[3]); return { ok: true } }
+  if (sub === 'content' && method === 'PUT') { demoSetContent(parts[3], body.value); return { ok: true } }
+  if (sub === 'content' && method === 'DELETE') return { value: demoResetContent(parts[3]) }
+  if (sub === 'upload') return { url: body.data } // keep the picture inline; nothing is uploaded anywhere
+  if (sub === 'account') return { ok: true }
+  throw new Error('Not available in demo mode')
+}
+
+export const loadContent = async () => (DEMO_ADMIN ? demoContentSaved() : fetch('/api/content').then((r) => r.json()))
+
 export async function call(path, token, opts = {}) {
+  if (DEMO_ADMIN) { await Promise.resolve(); return demoCall(path, opts) }
   const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } })
   if (r.status === 401) throw new Error('auth')
   const j = await r.json().catch(() => ({}))

@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Logo, Ic } from './ui.jsx'
 import { defaults } from './data.js'
 import { merge } from './content.jsx'
-import { call, TOKEN_KEY } from './admin/api.js'
+import { call, loadContent, TOKEN_KEY } from './admin/api.js'
+import { DEMO_ADMIN, DEMO_USER, DEMO_PASS } from './config.js'
 import { AdminCtx } from './admin/ctx.js'
 import { Dashboard, LeadsView } from './admin/Leads.jsx'
 import { SECTIONS, SectionEditor, AccountPage, BackupPage } from './admin/sections.jsx'
@@ -20,13 +21,18 @@ const NAV = [
 const groupOf = (tab) => NAV.find((n) => n.items?.some(([id]) => id === tab))?.group
 
 function Login({ onLogin }) {
-  const [u, setU] = useState('')
-  const [pw, setPw] = useState('')
+  const [u, setU] = useState(DEMO_ADMIN ? DEMO_USER : '')
+  const [pw, setPw] = useState(DEMO_ADMIN ? DEMO_PASS : '')
   const [err, setErr] = useState('')
   const [busy, setBusy] = useState(false)
   const go = async (e) => {
     e.preventDefault()
     setBusy(true); setErr('')
+    if (DEMO_ADMIN) {
+      if (u === DEMO_USER && pw === DEMO_PASS) onLogin('demo')
+      else { setErr('Demo login is admin / admin123'); setBusy(false) }
+      return
+    }
     try {
       const r = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, password: pw }) })
       const j = await r.json().catch(() => ({}))
@@ -44,7 +50,7 @@ function Login({ onLogin }) {
         <input type="password" placeholder="Password" value={pw} onChange={(e) => setPw(e.target.value)} required autoComplete="current-password" />
         {err && <div className="aerr">{err}</div>}
         <button className="abtn" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
-        <div className="demo-hint">Demo login: <b>admin</b> / <b>admin123</b></div>
+        <div className="demo-hint">Demo login: <b>admin</b> / <b>admin123</b>{DEMO_ADMIN ? ' (already filled in, just press Sign in)' : ''}</div>
       </form>
     </div>
   )
@@ -63,7 +69,7 @@ function Panel({ token, onLogout }) {
   const loadLeads = useCallback(() => call('/api/admin/leads', token).then((r) => setLeads(r.leads)).catch(guard), [token, guard])
   const refreshMe = useCallback(() => call('/api/admin/me', token).then(setMe).catch(guard), [token, guard])
   useEffect(() => {
-    Promise.all([loadLeads(), fetch('/api/content').then((r) => r.json()).then((c) => setContent(merge(c))), refreshMe()]).then(() => setLoaded(true)).catch(() => setLoaded(true))
+    Promise.all([loadLeads(), loadContent().then((c) => setContent(merge(c))), refreshMe()]).then(() => setLoaded(true)).catch(() => setLoaded(true))
     const t = setInterval(loadLeads, 8000)
     return () => clearInterval(t)
   }, [loadLeads, refreshMe])
@@ -135,6 +141,9 @@ function Panel({ token, onLogout }) {
             </div>
             <span className="live"><i /> Live</span>
           </header>
+          {me.sandbox && (
+            <div className="note warn">Demo mode: this panel shows sample leads and works only in this browser. Your changes are not sent to any server.</div>
+          )}
           {me.open && (
             <div className="note warn">Admin login is switched off, so anyone who knows the /admin link can see leads and edit the website. Turn the login back on before sharing the site widely.</div>
           )}
@@ -153,7 +162,7 @@ export default function Admin() {
   const [checked, setChecked] = useState(!!token)
   // If the server has the login switched off, go straight into the panel.
   useEffect(() => {
-    if (token) return
+    if (token || DEMO_ADMIN) { setChecked(true); return }
     fetch('/api/admin/me').then((r) => (r.ok ? r.json() : null)).then((m) => { if (m?.open) setToken('open') }).catch(() => {}).finally(() => setChecked(true))
   }, [])
   const login = (t) => { try { sessionStorage.setItem(TOKEN_KEY, t) } catch { /* private mode */ } setToken(t) }
