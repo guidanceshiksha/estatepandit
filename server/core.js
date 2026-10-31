@@ -7,6 +7,8 @@ const STATUSES = ['partial', 'new', 'contacted', 'qualified', 'closed', 'lost']
 const KINDS = ['enquiry', 'visit', 'area', 'service', 'contact', 'search', 'callback']
 const CONTENT_KEYS = Object.keys(defaults)
 const DEMO = { user: 'admin', pass: 'admin123' }
+// For now the admin panel is open (no login). Set ADMIN_REQUIRE_LOGIN=1 on the host to turn the login back on.
+const LOGIN_REQUIRED = process.env.ADMIN_REQUIRE_LOGIN === '1'
 const MIME = { '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif' }
 
 const clean = (v, n) => (typeof v === 'string' ? v.replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n) : '')
@@ -49,6 +51,7 @@ export function createCore(storage) {
     return body + '.' + crypto.createHmac('sha256', await storage.getSecret()).update(body).digest('base64url')
   }
   async function isAdmin(req) {
+    if (!LOGIN_REQUIRED) return true
     const [body, sig] = String((req.headers.authorization || '').replace(/^Bearer /, '')).split('.')
     if (!body || !sig) return false
     const good = crypto.createHmac('sha256', await storage.getSecret()).update(body).digest('base64url')
@@ -106,7 +109,7 @@ export function createCore(storage) {
       if (!(await isAdmin(req))) return send(res, 401, { error: 'Unauthorized' })
       const auth = await storage.getAuth()
 
-      if (req.method === 'GET' && parts[2] === 'me') return send(res, 200, { demo: !auth, user: auth ? auth.user : DEMO.user })
+      if (req.method === 'GET' && parts[2] === 'me') return send(res, 200, { demo: !auth, user: auth ? auth.user : DEMO.user, open: !LOGIN_REQUIRED })
 
       if (req.method === 'POST' && parts[2] === 'account') {
         const b = await readBody(req)

@@ -53,7 +53,7 @@ function Login({ onLogin }) {
 function Panel({ token, onLogout }) {
   const [leads, setLeads] = useState([])
   const [content, setContent] = useState(merge())
-  const [me, setMe] = useState({ demo: false, user: 'admin' })
+  const [me, setMe] = useState({ demo: false, user: 'admin', open: false })
   const [tab, setTab] = useState('dashboard')
   const [openGroup, setOpenGroup] = useState('')
   const [menu, setMenu] = useState(false)
@@ -123,7 +123,7 @@ function Panel({ token, onLogout }) {
           </nav>
           <div className="side-foot">
             <a href="/" target="_blank" rel="noreferrer">View website ↗</a>
-            <button onClick={onLogout}>Sign out</button>
+            {!me.open && <button onClick={onLogout}>Sign out</button>}
           </div>
         </aside>
         <main>
@@ -135,7 +135,10 @@ function Panel({ token, onLogout }) {
             </div>
             <span className="live"><i /> Live</span>
           </header>
-          {me.demo && tab !== 'account' && (
+          {me.open && (
+            <div className="note warn">Admin login is switched off, so anyone who knows the /admin link can see leads and edit the website. Turn the login back on before sharing the site widely.</div>
+          )}
+          {!me.open && me.demo && tab !== 'account' && (
             <div className="note warn">You are signed in with the demo login. <button className="link" onClick={() => go('account')}>Change it now →</button></div>
           )}
           {view}
@@ -147,8 +150,15 @@ function Panel({ token, onLogout }) {
 
 export default function Admin() {
   const [token, setToken] = useState(() => { try { return sessionStorage.getItem(TOKEN_KEY) || '' } catch { return '' } })
+  const [checked, setChecked] = useState(!!token)
+  // If the server has the login switched off, go straight into the panel.
+  useEffect(() => {
+    if (token) return
+    fetch('/api/admin/me').then((r) => (r.ok ? r.json() : null)).then((m) => { if (m?.open) setToken('open') }).catch(() => {}).finally(() => setChecked(true))
+  }, [])
   const login = (t) => { try { sessionStorage.setItem(TOKEN_KEY, t) } catch { /* private mode */ } setToken(t) }
   const logout = useCallback(() => { try { sessionStorage.removeItem(TOKEN_KEY) } catch { /* ignore */ } setToken('') }, [])
   useEffect(() => { document.title = 'Admin · Pandit Estate' }, [])
+  if (!checked) return null
   return token ? <Panel token={token} onLogout={logout} /> : <Login onLogin={login} />
 }

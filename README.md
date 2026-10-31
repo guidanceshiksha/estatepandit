@@ -41,3 +41,7 @@ Vercel par server files save nahi kar sakta, isliye data ke liye Upstash Redis c
 4. **SEO > Site SEO** mein apna final website address bharo.
 
 Redis ke bina site dikhegi, par leads aur admin changes save nahi honge.
+
+## Admin login on/off
+
+Abhi admin login **band** hai (`/admin` seedha khulta hai). Login wapas chalu karne ke liye host par environment variable `ADMIN_REQUIRE_LOGIN=1` set karo (Vercel: Settings > Environment Variables) aur redeploy karo. Tab demo login `admin` / `admin123` kaam karega; Settings > Account & Login se badal lo.
