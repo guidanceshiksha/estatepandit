@@ -30,3 +30,14 @@ After launch, set the website address in Admin > SEO > Site SEO.
 4. **SEO > Site SEO** mein apna final website address bharo.
 
 `DATA_DIR=/var/data` disk par leads, saved content, uploads aur login rakhta hai, isliye redeploy par kuch nahi jaata.
+
+## Deploy on Vercel
+
+Vercel par server files save nahi kar sakta, isliye data ke liye Upstash Redis chahiye (free plan hai).
+
+1. Vercel project > **Storage** (ya Marketplace) > **Upstash Redis** > Create, aur use apne project se **Connect** karo. Isse `KV_REST_API_URL` aur `KV_REST_API_TOKEN` apne aap set ho jate hain.
+2. Project **Redeploy** karo (Deployments > ... > Redeploy). `vercel.json` build, rewrites aur functions sambhal leta hai.
+3. `/admin` kholo (demo login `admin` / `admin123`) aur **Settings > Account & Login** mein password badlo.
+4. **SEO > Site SEO** mein apna final website address bharo.
+
+Redis ke bina site dikhegi, par leads aur admin changes save nahi honge.
