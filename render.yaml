@@ -1,0 +1,18 @@
+# Render Blueprint: creates the web service and a persistent disk for leads, content and uploads.
+services:
+  - type: web
+    name: pandit-estate
+    runtime: node
+    plan: starter # persistent disks are not available on the free plan
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /robots.txt
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: DATA_DIR
+        value: /var/data
+    disk:
+      name: pandit-data
+      mountPath: /var/data
+      sizeGB: 1

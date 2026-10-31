@@ -14,7 +14,8 @@ try { process.loadEnvFile(path.join(ROOT, '.env')) } catch { /* env may come fro
 const PORT = process.argv.includes('--dev') ? 3001 : Number(process.env.PORT) || 3001
 
 /* ---------- storage ---------- */
-const DATA_DIR = path.join(here, 'data')
+// Point DATA_DIR at a persistent disk in production so leads, content and uploads survive deploys.
+const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(here, 'data')
 const UPLOAD_DIR = path.join(DATA_DIR, 'uploads')
 fs.mkdirSync(UPLOAD_DIR, { recursive: true })
 const file = (n) => path.join(DATA_DIR, n)

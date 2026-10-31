@@ -21,3 +21,12 @@ npm start          # serves the site, API, sitemap and SEO tags; uses the host's
 
 Needs a host that runs Node and keeps `server/data/` between restarts (leads, saved content, uploads, login).
 After launch, set the website address in Admin > SEO > Site SEO.
+
+## Deploy on Render (one-time)
+
+1. Render.com par login karo, **New + > Blueprint** chuno aur is GitHub repo ko connect karo.
+2. Render `render.yaml` padh kar service aur 1 GB disk bana dega (disk ke liye paid "Starter" plan chahiye).
+3. Deploy hone ke baad site ka URL milega. `/admin` kholo, demo login se aao aur **Settings > Account & Login** mein password badlo.
+4. **SEO > Site SEO** mein apna final website address bharo.
+
+`DATA_DIR=/var/data` disk par leads, saved content, uploads aur login rakhta hai, isliye redeploy par kuch nahi jaata.
