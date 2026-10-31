@@ -29,8 +29,8 @@ function Login({ onLogin }) {
     setBusy(true); setErr('')
     try {
       const r = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, password: pw }) })
-      const j = await r.json()
-      if (!r.ok) throw new Error(j.error || 'Login failed')
+      const j = await r.json().catch(() => ({}))
+      if (!r.ok) throw new Error(j.error || `Server error (${r.status}). Check that Redis is connected and redeploy.`)
       onLogin(j.token)
     } catch (x) { setErr(x.message) } finally { setBusy(false) }
   }

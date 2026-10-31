@@ -8,7 +8,7 @@ const KINDS = ['enquiry', 'visit', 'area', 'service', 'contact', 'search', 'call
 const CONTENT_KEYS = Object.keys(defaults)
 const DEMO = { user: 'admin', pass: 'admin123' }
 // For now the admin panel is open (no login). Set ADMIN_REQUIRE_LOGIN=1 on the host to turn the login back on.
-const LOGIN_REQUIRED = process.env.ADMIN_REQUIRE_LOGIN === '1'
+const LOGIN_REQUIRED = ['1', 'true', 'yes', 'on'].includes(String(process.env.ADMIN_REQUIRE_LOGIN || '').trim().toLowerCase())
 const MIME = { '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif' }
 
 const clean = (v, n) => (typeof v === 'string' ? v.replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n) : '')
@@ -23,6 +23,15 @@ const send = (res, code, body, headers = {}) => {
   res.end(JSON.stringify(body))
 }
 const readBody = (req, limit = 32 * 1024) => new Promise((resolve, reject) => {
+  // Serverless hosts (Vercel) may already have read and parsed the body into req.body.
+  const pre = req.body
+  if (pre !== undefined && pre !== null) {
+    try {
+      if (Buffer.isBuffer(pre)) return resolve(JSON.parse(pre.toString() || '{}'))
+      if (typeof pre === 'string') return resolve(JSON.parse(pre || '{}'))
+      return resolve(pre)
+    } catch (e) { return reject(e) }
+  }
   let size = 0
   const chunks = []
   req.on('data', (c) => {

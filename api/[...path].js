@@ -4,7 +4,7 @@ import { pickStorage } from '../server/storage.js'
 
 const core = createCore(pickStorage('/tmp/pandit-data'))
 
-export const config = { api: { bodyParser: false } }
+// Vercel may pre-parse JSON into req.body; core.readBody handles both cases.
 
 export default async function handler(req, res) {
   const url = new URL(req.url, 'http://localhost')
