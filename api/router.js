@@ -16,6 +16,6 @@ export default async function handler(req, res) {
     return await core.api(req, res, url)
   } catch (e) {
     console.error(e)
-    if (!res.headersSent) { res.statusCode = 500; res.setHeader('Content-Type', 'application/json'); res.end('{"error":"server error"}') }
+    if (!res.headersSent) { res.statusCode = 500; res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify({ error: /^(Supabase|fetch failed|Invalid URL)/.test(e.message) ? 'Database error: ' + e.message : 'server error' })) }
   }
 }
