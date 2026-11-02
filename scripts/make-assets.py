@@ -6,12 +6,15 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 PUB = os.path.join(ROOT, 'public')
 FONTS = r'C:\Windows\Fonts'
 SANSB = ['segoeuib.ttf', 'arialbd.ttf']
+CINZEL = os.path.join(ROOT, 'scripts', 'fonts', 'Cinzel-Bold.woff')
 SANS = ['segoeui.ttf', 'arial.ttf']
 
-TEAL, DEEP, CORAL, MINT = (34, 164, 93), (10, 59, 42), (255, 123, 132), (123, 227, 163)
+TEAL, DEEP, CORAL, MINT = (50, 56, 66), (14, 16, 20), (255, 107, 122), (255, 154, 166)
 
 
 def font(names, size):
+    if names == 'cinzel':
+        return ImageFont.truetype(CINZEL, size)
     for n in names:
         p = os.path.join(FONTS, n)
         if os.path.exists(p):
@@ -42,7 +45,7 @@ def icon(px):
     d.line(pts, fill=CORAL, width=w, joint='curve')
     for p in (pts[0], pts[2]):
         d.ellipse((p[0] - w / 2, p[1] - w / 2, p[0] + w / 2, p[1] + w / 2), fill=CORAL)
-    d.text((S * 0.5, S * 0.69), 'PE', font=font(SANSB, int(S * 0.34)), fill='white', anchor='mm')
+    d.text((S * 0.5, S * 0.69), 'PE', font=font('cinzel', int(S * 0.33)), fill='white', anchor='mm')
     d.rounded_rectangle((S * 0.26, S * 0.86, S * 0.74, S * 0.895), radius=int(S * 0.02), fill=CORAL)
     img.putalpha(mask)
     return img.resize((px, px), Image.LANCZOS)
@@ -73,13 +76,13 @@ bg = Image.alpha_composite(bg.convert('RGBA'), overlay)
 d = ImageDraw.Draw(bg)
 logo = icon(120)
 bg.paste(logo, (70, 64), logo)
-d.text((210, 98), 'Pandit', font=font(SANSB, 52), fill='white', anchor='lm')
+d.text((210, 98), 'PANDIT', font=font('cinzel', 50), fill='white', anchor='lm')
 d.text((212, 144), 'E S T A T E', font=font(SANSB, 20), fill=CORAL, anchor='lm')
-d.text((70, 300), 'PANDIT ESTATE', font=font(SANSB, 84), fill='white', anchor='ls')
+d.text((70, 300), 'PANDIT ESTATE', font=font('cinzel', 78), fill='white', anchor='ls')
 d.text((70, 372), 'Your Trusted Dwarka', font=font(SANSB, 48), fill='white', anchor='ls')
 d.text((70, 432), 'Property Partner', font=font(SANSB, 48), fill=MINT, anchor='ls')
 d.text((70, 490), 'DDA Flats · Society Flats · Plots · L-Zone Land · Rentals', font=font(SANS, 28), fill=(225, 245, 241), anchor='ls')
-d.rounded_rectangle((70, 520, 560, 586), radius=14, fill=(193, 18, 31))
+d.rounded_rectangle((70, 520, 560, 586), radius=14, fill=(200, 16, 46))
 d.text((315, 553), 'Call +91 98110 93769', font=font(SANSB, 30), fill='white', anchor='mm')
 bg.convert('RGB').save(os.path.join(PUB, 'og-default.jpg'), quality=86, optimize=True)
 print('assets written')

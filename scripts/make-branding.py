@@ -10,10 +10,13 @@ BLACK = ['seguibl.ttf', 'segoeuib.ttf', 'arialbd.ttf']
 BOLD = ['segoeuib.ttf', 'arialbd.ttf']
 REG = ['segoeui.ttf', 'arial.ttf']
 
-GREEN, DEEP, RED, REDL, MINT, WHITE = (15, 107, 61), (10, 59, 42), (193, 18, 31), (239, 51, 64), (123, 227, 163), (255, 255, 255)
+GREEN, DEEP, RED, REDL, MINT, WHITE = (36, 40, 48), (26, 29, 35), (200, 16, 46), (215, 38, 61), (255, 142, 155), (255, 255, 255)
+CINZEL = os.path.join(ROOT, 'scripts', 'fonts', 'Cinzel-Bold.woff')
 
 
 def font(names, size):
+    if names == 'cinzel':
+        return ImageFont.truetype(CINZEL, size)
     for n in names:
         p = os.path.join(FONTS, n)
         if os.path.exists(p):
@@ -43,11 +46,11 @@ def mark(size, bg=None):
     d.rounded_rectangle((0, 0, S - 1, S - 1), radius=int(S * 0.24), fill=GREEN)
     w = int(S * 0.07)
     pts = [(S * 0.17, S * 0.46), (S * 0.5, S * 0.17), (S * 0.83, S * 0.46)]
-    d.line(pts, fill=(255, 123, 132), width=w, joint='curve')
+    d.line(pts, fill=(255, 107, 122), width=w, joint='curve')
     for p in (pts[0], pts[2]):
-        d.ellipse((p[0] - w / 2, p[1] - w / 2, p[0] + w / 2, p[1] + w / 2), fill=(255, 123, 132))
-    d.text((S * 0.5, S * 0.70), 'PE', font=font(BLACK, int(S * 0.34)), fill=WHITE, anchor='mm')
-    d.rounded_rectangle((S * 0.26, S * 0.87, S * 0.74, S * 0.91), radius=int(S * 0.02), fill=(255, 123, 132))
+        d.ellipse((p[0] - w / 2, p[1] - w / 2, p[0] + w / 2, p[1] + w / 2), fill=(255, 107, 122))
+    d.text((S * 0.5, S * 0.70), 'PE', font=font('cinzel', int(S * 0.33)), fill=WHITE, anchor='mm')
+    d.rounded_rectangle((S * 0.26, S * 0.87, S * 0.74, S * 0.91), radius=int(S * 0.02), fill=(255, 107, 122))
     return img.resize((size, size), Image.LANCZOS)
 
 
@@ -58,9 +61,9 @@ def lockup(dark_bg):
     d = ImageDraw.Draw(img)
     img.paste(mark(900), (60, 100), mark(900))
     text = WHITE if dark_bg else DEEP
-    d.text((1060, 430), 'PANDIT', font=font(BLACK, 420), fill=text, anchor='ls')
-    d.text((1060, 800), 'ESTATE', font=font(BLACK, 420), fill=(255, 123, 132) if dark_bg else RED, anchor='ls')
-    d.rounded_rectangle((1060, 850, 3000, 878), radius=14, fill=(255, 123, 132) if dark_bg else RED)
+    d.text((1060, 430), 'PANDIT', font=font('cinzel', 400), fill=text, anchor='ls')
+    d.text((1060, 800), 'ESTATE', font=font('cinzel', 400), fill=(255, 107, 122) if dark_bg else RED, anchor='ls')
+    d.rounded_rectangle((1060, 850, 3000, 878), radius=14, fill=(255, 107, 122) if dark_bg else RED)
     d.text((1060, 1010), spaced('PROPERTY DEALERS & CONSULTANTS', 1), font=font(BOLD, 74), fill=text, anchor='ls')
     return img
 
@@ -82,7 +85,7 @@ d.rectangle((0, H - 40, W, H), fill=RED)
 
 m = mark(560)
 img.paste(m, (150, 130), m)
-d.text((800, 440), 'PANDIT ESTATE', font=fit(d, 'PANDIT ESTATE', BLACK, 4900, 400), fill=WHITE, anchor='ls')
+d.text((800, 440), 'PANDIT ESTATE', font=fit(d, 'PANDIT ESTATE', 'cinzel', 4900, 400), fill=WHITE, anchor='ls')
 d.rounded_rectangle((800, 490, 2400, 518), radius=14, fill=REDL)
 d.text((800, 640), spaced('PROPERTY DEALERS & CONSULTANTS', 1), font=fit(d, spaced('PROPERTY DEALERS & CONSULTANTS', 1), BOLD, 4900, 110), fill=MINT, anchor='ls')
 

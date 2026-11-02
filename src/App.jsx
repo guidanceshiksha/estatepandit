@@ -713,7 +713,7 @@ function Contact() {
   const [svg, setSvg] = useState('')
   const vcard = buildVcard(site)
   useEffect(() => {
-    QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#0a3b2a', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
+    QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#1a1d23', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
   }, [vcard])
   const download = () => {
     const url = URL.createObjectURL(new Blob([vcard], { type: 'text/vcard' }))

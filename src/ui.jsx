@@ -6,21 +6,21 @@ export function Logo({ dark = false, size = 44 }) {
       <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden>
         <defs>
           <linearGradient id="lg-bg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#22a45d" /><stop offset="1" stopColor="#0a3b2a" />
+            <stop offset="0" stopColor="#323842" /><stop offset="1" stopColor="#0e1014" />
           </linearGradient>
           <linearGradient id="lg-gold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#ffa3aa" /><stop offset="1" stopColor="#c1121f" />
+            <stop offset="0" stopColor="#ff6b7a" /><stop offset="1" stopColor="#c8102e" />
           </linearGradient>
         </defs>
         <rect x="2" y="2" width="52" height="52" rx="15" fill="url(#lg-bg)" />
         <path d="M10 25 28 10l18 15" fill="none" stroke="url(#lg-gold)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
         <rect x="19" y="27" width="4" height="13" rx="1" fill="#ffffff55" />
         <rect x="33" y="29" width="4" height="11" rx="1" fill="#ffffff55" />
-        <text x="28" y="43.5" textAnchor="middle" fontFamily="Poppins, Arial, sans-serif" fontWeight="800" fontSize="18" fill="#fff">PE</text>
+        <text x="28" y="43.5" textAnchor="middle" fontFamily="Cinzel, Georgia, serif" fontWeight="800" fontSize="19" fill="#fff">PE</text>
         <rect x="14" y="46" width="28" height="2.2" rx="1.1" fill="url(#lg-gold)" />
       </svg>
       <span className="brand-txt">
-        <b>Pandit</b>
+        <b>PANDIT</b>
         <i>ESTATE</i>
       </span>
     </span>
