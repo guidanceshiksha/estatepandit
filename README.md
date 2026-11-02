@@ -31,27 +31,22 @@ After launch, set the website address in Admin > SEO > Site SEO.
 
 `DATA_DIR=/var/data` disk par leads, saved content, uploads aur login rakhta hai, isliye redeploy par kuch nahi jaata.
 
-## Deploy on Vercel
+## Deploy on Vercel (database: Supabase)
 
-Vercel par server files save nahi kar sakta, isliye data ke liye Upstash Redis chahiye (free plan hai).
-
-1. Vercel project > **Storage** (ya Marketplace) > **Upstash Redis** > Create, aur use apne project se **Connect** karo. Isse `KV_REST_API_URL` aur `KV_REST_API_TOKEN` apne aap set ho jate hain.
-2. Project **Redeploy** karo (Deployments > ... > Redeploy). `vercel.json` build, rewrites aur functions sambhal leta hai.
-3. `/admin` kholo (demo login `admin` / `admin123`) aur **Settings > Account & Login** mein password badlo.
-4. **SEO > Site SEO** mein apna final website address bharo.
-
-Redis ke bina site dikhegi, par leads aur admin changes save nahi honge.
-
-## Supabase se database (Vercel ke saath, Upstash ki jagah)
+Vercel par server files save nahi kar sakta, isliye leads, content, blog aur login Supabase mein rakhte hain.
 
 1. supabase.com par project banao (ya Vercel > Storage / Marketplace se **Supabase** connect karo).
 2. Supabase > **SQL Editor** mein `supabase/schema.sql` paste karke **Run** karo (ek table `pe_kv` banti hai).
-3. Vercel > Settings > Environment Variables mein ye do rakho:
+3. Vercel > Settings > Environment Variables mein ye rakho:
    - `SUPABASE_URL` (Supabase > Project Settings > API > Project URL)
    - `SUPABASE_SERVICE_ROLE_KEY` (wahin ki **service_role** key; ise kabhi `VITE_` ya public mat banao)
-4. Admin login ke liye `VITE_REAL_ADMIN=1` aur `ADMIN_REQUIRE_LOGIN=1` bhi set karo, phir **Redeploy**.
+   - `VITE_REAL_ADMIN=1` (asli admin login)
+   - `ADMIN_REQUIRE_LOGIN=1`
+4. **Redeploy** karo (`VITE_REAL_ADMIN` build ke time padha jata hai). `vercel.json` build, rewrites aur functions sambhal leta hai.
+5. `/admin` kholo (`admin` / `admin123`) aur turant **Settings > Account & Login** mein naya username/password set karo.
+6. **SEO > Site SEO** mein apna final website address bharo.
 
-Supabase ke variables milte hi site Redis ke bajay Supabase use karti hai. `/admin` mein `admin` / `admin123` se aao aur turant Settings > Account & Login mein password badlo.
+Supabase variables ke bina site dikhegi, par leads aur admin changes save nahi honge.
 
 ## Admin login on/off
 
@@ -61,12 +56,12 @@ Abhi admin login **band** hai (`/admin` seedha khulta hai). Login wapas chalu ka
 
 Abhi `/admin` **demo mode** mein hai: login box mein `admin` / `admin123` pehle se bhare rehte hain, bas "Sign in" dabao. Panel sample leads ke saath browser mein hi chalta hai, koi server ya database nahi chahiye, aur changes sirf us browser mein rehte hain.
 
-Asli server login aur database wala admin chahiye to build ke time environment variable `VITE_REAL_ADMIN=1` set karo (Vercel: Settings > Environment Variables) aur redeploy karo. Tab Upstash Redis aur `ADMIN_REQUIRE_LOGIN=1` bhi lagega (upar ke sections dekho).
+Asli server login aur database wala admin chahiye to build ke time environment variable `VITE_REAL_ADMIN=1` set karo (Vercel: Settings > Environment Variables) aur redeploy karo. Tab Supabase aur `ADMIN_REQUIRE_LOGIN=1` bhi lagega (upar ke section dekho).
 
 ## Tests
 
 ```bash
-node scripts/test/backend.test.mjs   # leads, admin login, content, uploads, SEO, rate limit (files and Redis)
+node scripts/test/backend.test.mjs   # leads, admin login, content, uploads, SEO, rate limit (files and Supabase)
 ```
 
 ## Photos to add

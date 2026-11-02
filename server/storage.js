@@ -1,6 +1,6 @@
 // Two storage back-ends with the same async interface:
 //  - fileStorage: JSON files on disk (local dev, Render, any VPS)
-//  - redisStorage: Upstash Redis over REST (Vercel and other serverless hosts)
+//  - supabaseStorage: Supabase Postgres over REST (Vercel and other serverless hosts)
 import fs from 'node:fs'
 import path from 'node:path'
 import crypto from 'node:crypto'
@@ -41,46 +41,6 @@ export function fileStorage(dir) {
       const arr = (hits.get(key) || []).filter((t) => now - t < windowMs)
       arr.push(now); hits.set(key, arr)
       return arr.length
-    },
-  }
-}
-
-export function redisStorage(url, token) {
-  const cmd = async (...args) => {
-    const r = await fetch(url, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(args) })
-    const j = await r.json()
-    if (j.error) throw new Error(j.error)
-    return j.result
-  }
-  const pairs = (flat) => { const o = {}; for (let i = 0; i < (flat || []).length; i += 2) o[flat[i]] = JSON.parse(flat[i + 1]); return o }
-  let secret
-
-  return {
-    kind: 'redis',
-    async getLeads() { return Object.values(pairs(await cmd('HGETALL', 'pe:leads'))) },
-    async getLead(id) { const v = await cmd('HGET', 'pe:leads', id); return v ? JSON.parse(v) : null },
-    async countLeads() { return cmd('HLEN', 'pe:leads') },
-    async saveLead(lead) { await cmd('HSET', 'pe:leads', lead.id, JSON.stringify(lead)) },
-    async deleteLead(id) { await cmd('HDEL', 'pe:leads', id) },
-    async getContent() { return pairs(await cmd('HGETALL', 'pe:content')) },
-    async setContent(key, value) { await cmd('HSET', 'pe:content', key, JSON.stringify(value)) },
-    async delContent(key) { await cmd('HDEL', 'pe:content', key) },
-    async getAuth() { const v = await cmd('GET', 'pe:auth'); return v ? JSON.parse(v) : null },
-    async setAuth(a) { await cmd('SET', 'pe:auth', JSON.stringify(a)) },
-    async getSecret() {
-      if (secret) return secret
-      let v = await cmd('GET', 'pe:secret')
-      if (!v) { await cmd('SET', 'pe:secret', crypto.randomBytes(32).toString('hex'), 'NX'); v = await cmd('GET', 'pe:secret') }
-      secret = Buffer.from(v, 'hex')
-      return secret
-    },
-    async saveUpload(name, buf) { await cmd('SET', 'pe:up:' + name, buf.toString('base64')) },
-    async getUpload(name) { const v = await cmd('GET', 'pe:up:' + name); return v ? Buffer.from(v, 'base64') : null },
-    async hit(key, windowMs) {
-      const k = 'pe:rl:' + key
-      const n = await cmd('INCR', k)
-      if (n === 1) await cmd('EXPIRE', k, Math.ceil(windowMs / 1000))
-      return n
     },
   }
 }
@@ -140,12 +100,9 @@ export function supabaseStorage(url, key) {
   }
 }
 
-/** Picks Supabase, else Redis (Upstash/Vercel KV), else files in `dir`. */
+/** Supabase when its variables exist, otherwise files in `dir`. */
 export function pickStorage(dir) {
-  const sbUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
-  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (sbUrl && sbKey) return supabaseStorage(sbUrl, sbKey)
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
-  return url && token ? redisStorage(url, token) : fileStorage(dir)
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  return url && key ? supabaseStorage(url, key) : fileStorage(dir)
 }

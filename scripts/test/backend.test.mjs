@@ -1,5 +1,5 @@
 // End-to-end backend checks. Run: node scripts/test/backend.test.mjs
-// Spawns the real server (file storage, then Redis through a local mock) and exercises leads, admin auth,
+// Spawns the real server (file storage, then Supabase through a local mock) and exercises leads, admin auth,
 // content, uploads, SEO output and rate limits.
 import { spawn } from 'node:child_process'
 import http from 'node:http'
@@ -13,29 +13,6 @@ let pass = 0
 const fails = []
 const ok = (cond, name, extra = '') => { cond ? pass++ : fails.push(name + (extra ? ` -> ${extra}` : '')) }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
-
-function startMock(port) {
-  const kv = new Map()
-  const run = ([c, ...a]) => {
-    c = c.toUpperCase()
-    if (c === 'GET') return kv.get(a[0]) ?? null
-    if (c === 'SET') { if (a[2] === 'NX' && kv.has(a[0])) return null; kv.set(a[0], a[1]); return 'OK' }
-    if (c === 'HSET') { const h = kv.get(a[0]) || {}; const n = a[1] in h ? 0 : 1; h[a[1]] = a[2]; kv.set(a[0], h); return n }
-    if (c === 'HGET') return (kv.get(a[0]) || {})[a[1]] ?? null
-    if (c === 'HDEL') { const h = kv.get(a[0]) || {}; delete h[a[1]]; return 1 }
-    if (c === 'HLEN') return Object.keys(kv.get(a[0]) || {}).length
-    if (c === 'HGETALL') return Object.entries(kv.get(a[0]) || {}).flat()
-    if (c === 'INCR') { const n = (Number(kv.get(a[0])) || 0) + 1; kv.set(a[0], String(n)); return n }
-    if (c === 'EXPIRE') return 1
-    throw new Error('unsupported ' + c)
-  }
-  const srv = http.createServer((req, res) => {
-    let b = ''
-    req.on('data', (d) => (b += d))
-    req.on('end', () => { try { res.end(JSON.stringify({ result: run(JSON.parse(b)) })) } catch (e) { res.end(JSON.stringify({ error: e.message })) } })
-  }).listen(port)
-  return srv
-}
 
 // Minimal PostgREST stand-in for the pe_kv table (select/upsert/delete with eq filters, Range paging).
 function startSupabaseMock(port) {
@@ -218,11 +195,8 @@ async function run(label, port, env, opts) {
 
 await run('files+login', 3101, { ADMIN_REQUIRE_LOGIN: '1' }, { loginRequired: true })
 await run('files+open', 3102, { ADMIN_REQUIRE_LOGIN: '' }, { loginRequired: false })
-const mock = startMock(3103)
-await run('redis+login', 3104, { ADMIN_REQUIRE_LOGIN: '1', KV_REST_API_URL: 'http://localhost:3103', KV_REST_API_TOKEN: 'x' }, { loginRequired: true })
-mock.close()
 const sb = startSupabaseMock(3105)
-await run('supabase+login', 3106, { ADMIN_REQUIRE_LOGIN: '1', SUPABASE_URL: 'http://localhost:3105', SUPABASE_SERVICE_ROLE_KEY: 'svc-key', KV_REST_API_URL: '', KV_REST_API_TOKEN: '' }, { loginRequired: true })
+await run('supabase+login', 3106, { ADMIN_REQUIRE_LOGIN: '1', SUPABASE_URL: 'http://localhost:3105', SUPABASE_SERVICE_ROLE_KEY: 'svc-key' }, { loginRequired: true })
 sb.close()
 
 console.log(`\n${pass} checks passed, ${fails.length} failed`)

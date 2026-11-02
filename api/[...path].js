@@ -1,4 +1,4 @@
-// Vercel function: JSON API (/api/*). Data lives in Upstash Redis (set up from the Vercel Marketplace).
+// Vercel function: JSON API (/api/*). Data lives in Supabase (see supabase/schema.sql).
 import { createCore } from '../server/core.js'
 import { pickStorage } from '../server/storage.js'
 
