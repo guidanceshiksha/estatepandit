@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence, useInView, useScroll, useSpring } from 'framer-motion'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import QRCode from 'qrcode'
 import { NEEDS } from './data.js'
 import { useContent, useSeo } from './content.jsx'
@@ -7,8 +7,8 @@ import { useLeadForm } from './leads.js'
 import { Logo, Ic, Social } from './ui.jsx'
 import { Markdown } from './md.jsx'
 
-const fade = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } } }
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } }
+const fade = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } } }
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } }
 const vp = { once: true, margin: '-60px' }
 const tel = (p) => `tel:${String(p).replace(/\s/g, '')}`
 
@@ -21,7 +21,7 @@ const Reveal = ({ children, className }) => (
 const Group = ({ children, className }) => (
   <motion.div className={className} variants={stagger} initial="hidden" whileInView="show" viewport={vp}>{children}</motion.div>
 )
-const Item = ({ children, className, lift = -6 }) => (
+const Item = ({ children, className, lift = -2 }) => (
   <motion.div className={className} variants={fade} whileHover={{ y: lift }}>{children}</motion.div>
 )
 const Title = ({ children, sub, light }) => (
@@ -202,13 +202,14 @@ function Hero() {
       <div className="slides" aria-hidden>
         <AnimatePresence initial={false}>
           <motion.div key={slide} className="slide" style={{ backgroundImage: slides[slide % slides.length] ? `url(${slides[slide % slides.length]})` : undefined }}
-            initial={{ opacity: 0, scale: 1 }} animate={{ opacity: 1, scale: 1.06 }} exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 1 }} animate={{ opacity: 1, scale: 1.05 }} exit={{ opacity: 0 }}
             transition={{ opacity: { duration: 1.2 }, scale: { duration: 8, ease: 'linear' } }} />
         </AnimatePresence>
       </div>
+      <div className="hero-fade" aria-hidden />
       <div className="hero-wrap">
-        <motion.div className="hero-card" initial="hidden" animate="show" variants={stagger}>
-          <motion.span className="eyebrow pill" variants={fade}>{site.heroEyebrow}</motion.span>
+        <motion.div className="hero-copy" initial="hidden" animate="show" variants={stagger}>
+          <motion.p className="kicker" variants={fade}>{site.heroEyebrow}</motion.p>
           <motion.h1 variants={fade}>
             {site.heroTitle.split('\n').map((line, i, all) => (
               <span key={i} className={i === 0 ? 'h-brand' : i === all.length - 1 ? 'h-hl' : 'h-mid'}>{line}</span>
@@ -217,12 +218,8 @@ function Hero() {
           <motion.p variants={fade} className="hero-sub">{site.heroSub}</motion.p>
           <motion.div variants={fade} className="hero-cta">
             <a className="btn" href={tel(site.phone)}><Ic n="phone" size={18} /> Call Now</a>
-            <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={18} /> WhatsApp</a>
+            <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={18} mono /> WhatsApp</a>
           </motion.div>
-          <motion.ul variants={fade} className="hero-trust">
-            <li><GoogleG size={16} /> <b>{reviews.score}</b> <Stars /> <span>{reviews.count} reviews</span></li>
-            {sold && <li><Ic n="key" size={16} /> <b>{Number(sold.value).toLocaleString('en-IN')}{sold.suffix}</b> <span>{sold.label}</span></li>}
-          </motion.ul>
           <motion.form variants={fade} className="search" onSubmit={search}>
             <select name="type" aria-label="Property type" defaultValue="">
               <option value="" disabled>Property Type</option>
@@ -247,9 +244,13 @@ function Hero() {
             )}
             <button className="btn">Find Your Home</button>
           </motion.form>
-          <motion.div variants={fade} className="deals">
-            <span>Deals in:</span>{site.dealsIn.map((d) => <a key={d} href="#listings" className="deal">{d}</a>)}
-          </motion.div>
+          <motion.p variants={fade} className="hero-facts">
+            <span><GoogleG size={15} /> <b>{reviews.score}</b> on Google</span>
+            {sold && <span><b>{Number(sold.value).toLocaleString('en-IN')}{sold.suffix}</b> {sold.label.toLowerCase()}</span>}
+          </motion.p>
+          <motion.p variants={fade} className="deals">
+            <em>We deal in</em>{site.dealsIn.map((d) => <a key={d} href="#listings" className="deal">{d}</a>)}
+          </motion.p>
         </motion.div>
       </div>
       <div className="dots">
@@ -280,12 +281,11 @@ function Services() {
           <Item key={s.title} className="card scard">
             <div className="simg">
               <Photo src={s.image} alt={s.title} />
-              <span className="sbadge"><Ic n={s.icon} size={22} /></span>
             </div>
             <div className="sbody">
               <h3>{s.title}</h3>
               <p>{s.line}</p>
-              <button className="btn xs" onClick={() => enquire({ title: s.title, need: s.need, source: `Service: ${s.title}`, kind: 'service' })}>{s.cta} <Ic n="arrow" size={15} /></button>
+              <button className="btn xs ghost" onClick={() => enquire({ title: s.title, need: s.need, source: `Service: ${s.title}`, kind: 'service' })}>{s.cta} <Ic n="arrow" size={15} /></button>
             </div>
           </Item>
         ))}
@@ -379,8 +379,7 @@ const Stats = () => {
       <Title sub={track.sub}>{track.title}</Title>
       <Group className="stat-grid">
         {track.items.map((s) => (
-          <Item key={s.label} className="stat" lift={-3}>
-            <span className="sico"><Ic n={s.icon} size={20} /></span>
+          <Item key={s.label} className="stat" lift={0}>
             <b><Counter to={Number(s.value) || 0} suffix={s.suffix} prefix={s.prefix} /></b>
             <span className="slabel">{s.label}</span>
           </Item>
@@ -450,19 +449,17 @@ function Why() {
   return (
     <section className="sec why">
       <Title sub={why.sub}>{why.title}</Title>
-      <Group className="grid g3">
-        {why.items.map((w, i) => (
-          <Item key={w.title} className="wcard" lift={-4}>
-            <span className="wnum">0{i + 1}</span>
-            <span className="wicon"><Ic n={w.icon} size={24} /></span>
-            <h3>{w.title}</h3>
-            <p>{w.text}</p>
+      <Group className="why-list">
+        {why.items.map((w) => (
+          <Item key={w.title} className="why-item" lift={0}>
+            <span className="wicon"><Ic n={w.icon} size={26} stroke={1.6} /></span>
+            <div><h3>{w.title}</h3><p>{w.text}</p></div>
           </Item>
         ))}
       </Group>
       <Reveal className="why-foot">
         <div className="why-score"><GoogleG size={22} /><b>{reviews.score}</b><Stars /><span>{why.scoreNote}</span></div>
-        <button className="btn" onClick={() => enquire({ title: 'Speak to an advisor', source: 'Why choose us' })}>Speak to an Advisor <Ic n="arrow" size={16} /></button>
+        <button className="btn" onClick={() => enquire({ title: 'Speak to an advisor', source: 'Why choose us' })}>Speak to an Advisor</button>
       </Reveal>
     </section>
   )
@@ -604,7 +601,7 @@ const Blog = () => {
     <section id="blog" className="sec">
       <Title sub={blogs.sub}>{blogs.title}</Title>
       <Group className="grid g3">{published(blogs).slice(0, 3).map((b) => <BlogCard key={b.id} b={b} />)}</Group>
-      <Reveal className="center"><a href="/blog" className="btn">View All Articles <Ic n="arrow" size={16} /></a></Reveal>
+      <Reveal className="center"><a href="/blog" className="btn ghost">View All Articles <Ic n="arrow" size={16} /></a></Reveal>
     </section>
   )
 }
@@ -646,9 +643,9 @@ function PostPage({ slug }) {
           <span className="av-lg">{site.ownerName.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>
           <div><b>{site.ownerName}</b><small>Founder, {site.name} · 25+ years in Dwarka property</small></div>
           <div className="share">
-            <a href={`https://wa.me/?text=${encodeURIComponent(post.title + ' ' + (typeof location !== 'undefined' ? location.href : ''))}`} target="_blank" rel="noreferrer" aria-label="Share on WhatsApp"><Social name="whatsapp" size={18} /></a>
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof location !== 'undefined' ? location.href : '')}`} target="_blank" rel="noreferrer" aria-label="Share on Facebook"><Social name="facebook" size={18} /></a>
-            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof location !== 'undefined' ? location.href : '')}`} target="_blank" rel="noreferrer" aria-label="Share on LinkedIn"><Social name="linkedin" size={18} /></a>
+            <a href={`https://wa.me/?text=${encodeURIComponent(post.title + ' ' + (typeof location !== 'undefined' ? location.href : ''))}`} target="_blank" rel="noreferrer" aria-label="Share on WhatsApp"><Social name="whatsapp" size={18} mono /></a>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof location !== 'undefined' ? location.href : '')}`} target="_blank" rel="noreferrer" aria-label="Share on Facebook"><Social name="facebook" size={18} mono /></a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof location !== 'undefined' ? location.href : '')}`} target="_blank" rel="noreferrer" aria-label="Share on LinkedIn"><Social name="linkedin" size={18} mono /></a>
           </div>
         </div>
         <div className="post-cta">
@@ -746,7 +743,7 @@ function Contact() {
           </ul>
           <div className="cbtns">
             <a className="btn" href={tel(site.phone)}><Ic n="phone" size={16} /> Call Now</a>
-            <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={16} /> WhatsApp</a>
+            <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={16} mono /> WhatsApp</a>
             <a className="btn ghost" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.mapQuery)}`} target="_blank" rel="noreferrer"><Ic n="directions" size={16} /> Directions</a>
           </div>
         </Item>
@@ -801,28 +798,35 @@ function Footer() {
   const links = [['Home', '/#home'], ['Featured Properties', '/#listings'], ['About Us', '/#about'], ['Home Loans', '/#loans'], ['Refer & Earn', '/#refer'], ['Blog', '/blog'], ['Contact', '/#contact']]
   return (
     <footer className="footer">
+      <div className="fcta">
+        <div><h3>Looking for a property in Dwarka?</h3><p>Talk to {site.ownerName} and the {site.name} team. Call or message us anytime during working hours.</p></div>
+        <div className="fcta-btns">
+          <a className="btn" href={tel(site.phone)}><Ic n="phone" size={17} /> {site.phone}</a>
+          <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={17} mono /> WhatsApp</a>
+        </div>
+      </div>
       <div className="fgrid">
         <div className="fbrand">
-          <Logo size={48} />
+          <Logo size={46} />
           <p>{site.footerText}</p>
           <div className="socials">
             {socials.map(([n, label, href]) => (
-              <a key={n} href={href || '#'} target={href ? '_blank' : undefined} rel="noreferrer" aria-label={label} className={`soc ${n}`}><Social name={n} size={19} /></a>
+              <a key={n} href={href || '#'} target={href ? '_blank' : undefined} rel="noreferrer" aria-label={label} title={label} className={`soc ${n}`}><Social name={n} size={20} /></a>
             ))}
           </div>
         </div>
         <div><h4>Services</h4>{services.items.slice(0, 7).map((s) => <a key={s.title} href="/#services">{s.title}</a>)}</div>
         <div><h4>Quick Links</h4>{links.map(([l, h]) => <a key={l} href={h}>{l}</a>)}</div>
         <div>
-          <h4>Contact</h4>
-          <a href={tel(site.phone)}><Ic n="phone" size={15} /> {site.phone}</a>
-          {site.phone2 && <a href={tel(site.phone2)}><Ic n="phone" size={15} /> {site.phone2}</a>}
-          <a href={`mailto:${site.email}`}><Ic n="mail" size={15} /> {site.email}</a>
-          <p><Ic n="pin" size={15} /> {site.address}</p>
+          <h4>Visit Us</h4>
+          <p><Ic n="pin" size={16} /><span>{site.address}</span></p>
+          <p><Ic n="clock" size={16} /><span>{site.hours}</span></p>
+          <a href={tel(site.phone)}><Ic n="phone" size={16} /><span>{site.phone}</span></a>
+          {site.phone2 && <a href={tel(site.phone2)}><Ic n="phone" size={16} /><span>{site.phone2}</span></a>}
+          <a href={`mailto:${site.email}`}><Ic n="mail" size={16} /><span>{site.email}</span></a>
         </div>
       </div>
-      <div className="fbar"><span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span><span>{site.hours}</span></div>
-      <div className="mega" aria-hidden>{site.name.toUpperCase()}</div>
+      <div className="fbar"><span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span><span>Dwarka, New Delhi</span></div>
     </footer>
   )
 }
@@ -876,23 +880,19 @@ function Floaters() {
             onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}><Ic n="arrow" size={20} stroke={2.4} /></motion.button>
         )}
       </AnimatePresence>
-      <motion.a className="wa" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp"
-        initial={{ scale: 0 }} animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 2.2 }}>
-        <Social name="whatsapp" size={30} />
-      </motion.a>
+      <a className="wa" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp">
+        <Social name="whatsapp" size={30} mono />
+      </a>
     </div>
   )
 }
 
 export default function App({ page = 'home', slug = '' }) {
   const { seo } = useContent()
-  const { scrollYProgress } = useScroll()
-  const w = useSpring(scrollYProgress, { stiffness: 120, damping: 24 })
   const [modal, setModal] = useState(null)
   useSeo(page === 'home' ? { title: seo.title, description: seo.description, image: seo.ogImage } : {})
   return (
     <Enquiry.Provider value={setModal}>
-      <motion.div className="progress" style={{ scaleX: w }} />
       <Nav />
       {page === 'blog' ? <BlogPage /> : page === 'post' ? <PostPage slug={slug} /> : (
         <><Hero /><About /><Services /><Listings /><Stats /><Why /><Loans /><Referral /><Partners /><Areas /><Blog /><Testimonials /><FAQ /><Contact /><MapSection /></>
