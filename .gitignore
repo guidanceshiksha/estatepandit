@@ -3,3 +3,4 @@ server/data/
 node_modules
 dist
 .claude/
+public/images/website image/

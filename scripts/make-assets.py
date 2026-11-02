@@ -63,7 +63,7 @@ big.save(os.path.join(PUB, 'favicon.ico'), sizes=[(16, 16), (32, 32), (48, 48)])
 
 # Social share image 1200x630 built from the project's own skyline photo
 W, H = 1200, 630
-bg = Image.open(os.path.join(PUB, 'images', 'home tour', 'Skyline view.jpg')).convert('RGB')
+bg = Image.open(os.path.join(PUB, 'images', 'hero', 'hero-1.jpg')).convert('RGB')
 k = max(W / bg.width, H / bg.height)
 bg = bg.resize((int(bg.width * k), int(bg.height * k)), Image.LANCZOS)
 x0, y0 = (bg.width - W) // 2, (bg.height - H) // 2
