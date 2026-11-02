@@ -85,8 +85,66 @@ export function redisStorage(url, token) {
   }
 }
 
-/** Picks Redis when the Upstash/Vercel KV variables exist, otherwise files in `dir`. */
+// Supabase Postgres through its REST API (no SDK). One table `pe_kv (ns, k, v jsonb)`, see supabase/schema.sql.
+export function supabaseStorage(url, key) {
+  const base = url.replace(/\/+$/, '') + '/rest/v1/pe_kv'
+  const H = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }
+  const q = (s) => encodeURIComponent(s)
+  const call = async (suffix, init = {}) => {
+    const r = await fetch(base + suffix, { ...init, headers: { ...H, ...init.headers } })
+    if (!r.ok) throw new Error(`Supabase ${r.status}: ${(await r.text()).slice(0, 200)}`)
+    return r
+  }
+  const all = async (ns) => {
+    const out = []
+    for (let from = 0; ; from += 1000) {
+      const r = await call(`?ns=eq.${q(ns)}&select=k,v&order=k`, { headers: { Range: `${from}-${from + 999}`, 'Range-Unit': 'items' } })
+      const rows = await r.json()
+      out.push(...rows)
+      if (rows.length < 1000) return out
+    }
+  }
+  const get = async (ns, k) => { const rows = await (await call(`?ns=eq.${q(ns)}&k=eq.${q(k)}&select=v`)).json(); return rows.length ? rows[0].v : null }
+  const set = (ns, k, v) => call('?on_conflict=ns,k', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify({ ns, k, v }) })
+  const del = (ns, k) => call(`?ns=eq.${q(ns)}&k=eq.${q(k)}`, { method: 'DELETE' })
+  let secret
+
+  return {
+    kind: 'supabase',
+    async getLeads() { return (await all('lead')).map((r) => r.v) },
+    async getLead(id) { return get('lead', id) },
+    async countLeads() { return (await all('lead')).length },
+    async saveLead(lead) { await set('lead', lead.id, lead) },
+    async deleteLead(id) { await del('lead', id) },
+    async getContent() { const o = {}; for (const r of await all('content')) o[r.k] = r.v; return o },
+    async setContent(key2, value) { await set('content', key2, value) },
+    async delContent(key2) { await del('content', key2) },
+    async getAuth() { return get('meta', 'auth') },
+    async setAuth(a) { await set('meta', 'auth', a) },
+    async getSecret() {
+      if (secret) return secret
+      await call('?on_conflict=ns,k', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=minimal' }, body: JSON.stringify({ ns: 'meta', k: 'secret', v: crypto.randomBytes(32).toString('hex') }) })
+      secret = Buffer.from(await get('meta', 'secret'), 'hex')
+      return secret
+    },
+    async saveUpload(name, buf) { await set('upload', name, buf.toString('base64')) },
+    async getUpload(name) { const v = await get('upload', name); return v ? Buffer.from(v, 'base64') : null },
+    async hit(key2, windowMs) {
+      const now = Date.now()
+      const cur = await get('rl', key2)
+      const arr = ((cur && cur.t) || []).filter((t) => now - t < windowMs)
+      arr.push(now)
+      await set('rl', key2, { t: arr })
+      return arr.length
+    },
+  }
+}
+
+/** Picks Supabase, else Redis (Upstash/Vercel KV), else files in `dir`. */
 export function pickStorage(dir) {
+  const sbUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (sbUrl && sbKey) return supabaseStorage(sbUrl, sbKey)
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
   return url && token ? redisStorage(url, token) : fileStorage(dir)

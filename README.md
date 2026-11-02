@@ -42,6 +42,17 @@ Vercel par server files save nahi kar sakta, isliye data ke liye Upstash Redis c
 
 Redis ke bina site dikhegi, par leads aur admin changes save nahi honge.
 
+## Supabase se database (Vercel ke saath, Upstash ki jagah)
+
+1. supabase.com par project banao (ya Vercel > Storage / Marketplace se **Supabase** connect karo).
+2. Supabase > **SQL Editor** mein `supabase/schema.sql` paste karke **Run** karo (ek table `pe_kv` banti hai).
+3. Vercel > Settings > Environment Variables mein ye do rakho:
+   - `SUPABASE_URL` (Supabase > Project Settings > API > Project URL)
+   - `SUPABASE_SERVICE_ROLE_KEY` (wahin ki **service_role** key; ise kabhi `VITE_` ya public mat banao)
+4. Admin login ke liye `VITE_REAL_ADMIN=1` aur `ADMIN_REQUIRE_LOGIN=1` bhi set karo, phir **Redeploy**.
+
+Supabase ke variables milte hi site Redis ke bajay Supabase use karti hai. `/admin` mein `admin` / `admin123` se aao aur turant Settings > Account & Login mein password badlo.
+
 ## Admin login on/off
 
 Abhi admin login **band** hai (`/admin` seedha khulta hai). Login wapas chalu karne ke liye host par environment variable `ADMIN_REQUIRE_LOGIN=1` set karo (Vercel: Settings > Environment Variables) aur redeploy karo. Tab demo login `admin` / `admin123` kaam karega; Settings > Account & Login se badal lo.

@@ -37,6 +37,34 @@ function startMock(port) {
   return srv
 }
 
+// Minimal PostgREST stand-in for the pe_kv table (select/upsert/delete with eq filters, Range paging).
+function startSupabaseMock(port) {
+  const rows = new Map()
+  const srv = http.createServer((req, res) => {
+    const u = new URL(req.url, 'http://x')
+    if (!u.pathname.endsWith('/rest/v1/pe_kv') || req.headers.apikey !== 'svc-key') { res.statusCode = 401; return res.end('{}') }
+    const eq = (n) => { const v = u.searchParams.get(n); return v && v.startsWith('eq.') ? v.slice(3) : null }
+    let b = ''
+    req.on('data', (d) => (b += d))
+    req.on('end', () => {
+      res.setHeader('Content-Type', 'application/json')
+      const key = (ns, k) => ns + '|' + k
+      if (req.method === 'POST') {
+        const r = JSON.parse(b), id = key(r.ns, r.k)
+        if (!(String(req.headers.prefer).includes('ignore-duplicates') && rows.has(id))) rows.set(id, r)
+        res.statusCode = 201; return res.end()
+      }
+      if (req.method === 'DELETE') { rows.delete(key(eq('ns'), eq('k'))); res.statusCode = 204; return res.end() }
+      const ns = eq('ns'), k = eq('k')
+      let out = [...rows.values()].filter((r) => r.ns === ns && (k == null || r.k === k)).sort((a, c) => (a.k < c.k ? -1 : 1))
+      const rg = /^(\d+)-(\d+)$/.exec(req.headers.range || '')
+      if (rg) out = out.slice(Number(rg[1]), Number(rg[2]) + 1)
+      res.end(JSON.stringify(out.map((r) => ({ k: r.k, v: r.v }))))
+    })
+  }).listen(port)
+  return srv
+}
+
 function startServer(port, env) {
   const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pe-test-'))
   const p = spawn(process.execPath, ['server/index.js'], { cwd: ROOT, env: { ...process.env, PORT: String(port), DATA_DIR: dataDir, ...env }, stdio: 'ignore' })
@@ -193,6 +221,9 @@ await run('files+open', 3102, { ADMIN_REQUIRE_LOGIN: '' }, { loginRequired: fals
 const mock = startMock(3103)
 await run('redis+login', 3104, { ADMIN_REQUIRE_LOGIN: '1', KV_REST_API_URL: 'http://localhost:3103', KV_REST_API_TOKEN: 'x' }, { loginRequired: true })
 mock.close()
+const sb = startSupabaseMock(3105)
+await run('supabase+login', 3106, { ADMIN_REQUIRE_LOGIN: '1', SUPABASE_URL: 'http://localhost:3105', SUPABASE_SERVICE_ROLE_KEY: 'svc-key', KV_REST_API_URL: '', KV_REST_API_TOKEN: '' }, { loginRequired: true })
+sb.close()
 
 console.log(`\n${pass} checks passed, ${fails.length} failed`)
 fails.forEach((f) => console.log(' FAIL', f))

@@ -1,5 +1,5 @@
 // Pandit Estate Node server: serves the built site and the API. Storage is files by default,
-// or Redis when KV_REST_API_URL / UPSTASH_REDIS_REST_URL is set.
+// Supabase when SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY are set, or Redis when KV_REST_API_URL / UPSTASH_REDIS_REST_URL is set.
 import http from 'node:http'
 import fs from 'node:fs'
 import path from 'node:path'
