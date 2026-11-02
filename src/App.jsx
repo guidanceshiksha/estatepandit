@@ -52,7 +52,7 @@ function Photo({ src, alt, className = 'bld', initials }) {
   return <img className={className} src={src} alt={alt} loading="lazy" onError={() => setBad(true)} />
 }
 
-function Counter({ to, suffix }) {
+function Counter({ to, suffix, prefix = '' }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true })
   const [n, setN] = useState(0)
@@ -68,7 +68,7 @@ function Counter({ to, suffix }) {
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [inView, to])
-  return <span ref={ref}>{n.toLocaleString('en-IN')}{suffix}</span>
+  return <span ref={ref}>{prefix}{n.toLocaleString('en-IN')}{suffix}</span>
 }
 
 /* ---------- enquiry modal: every field is saved to the server as it is typed ---------- */
@@ -381,7 +381,7 @@ const Stats = () => {
           {track.items.map((s) => (
             <Item key={s.label} className="stat" lift={-8}>
               <span className="sico"><Ic n={s.icon} size={24} /></span>
-              <b><Counter to={Number(s.value) || 0} suffix={s.suffix} /></b>
+              <b><Counter to={Number(s.value) || 0} suffix={s.suffix} prefix={s.prefix} /></b>
               <i className="bar"><motion.em initial={{ width: 0 }} whileInView={{ width: '100%' }} viewport={{ once: true }} transition={{ duration: 1.6 }} /></i>
               <span className="slabel">{s.label}</span>
             </Item>

@@ -62,7 +62,7 @@ export const SECTIONS = {
     key: 'track', title: 'Track Record (Counters)', desc: 'The animated numbers section.', link: '/#home',
     fields: [
       T('title', 'Heading'), T('sub', 'Sub heading'),
-      arr('items', 'Counters', { titleKey: 'label', noun: 'counter', blank: { value: 0, suffix: '+', label: '', icon: 'building' }, fields: [T('label', 'Label'), { k: 'value', label: 'Number', type: 'number' }, T('suffix', 'After the number (e.g. +)'), { k: 'icon', label: 'Icon', type: 'icon' }] }),
+      arr('items', 'Counters', { titleKey: 'label', noun: 'counter', blank: { value: 0, suffix: '+', label: '', icon: 'building' }, fields: [T('label', 'Label'), T('prefix', 'Before the number (e.g. #)'), { k: 'value', label: 'Number', type: 'number' }, T('suffix', 'After the number (e.g. +)'), { k: 'icon', label: 'Icon', type: 'icon' }] }),
     ],
   },
   reviews: {

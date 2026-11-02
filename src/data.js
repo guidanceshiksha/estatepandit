@@ -94,10 +94,10 @@ export const defaults = {
     title: 'Our Track Record',
     sub: 'Numbers that reflect the trust our clients place in us.',
     items: [
-      { value: 400, suffix: '+', label: 'Projects Completed', icon: 'building' },
+      { value: 1, prefix: '#', suffix: '', label: "Dwarka's No. 1 Real Estate", icon: 'badge' },
       { value: 8000, suffix: '+', label: 'Happy Clients', icon: 'users' },
       { value: 12000, suffix: '+', label: 'Properties Sold', icon: 'key' },
-      { value: 25, suffix: '+', label: 'Years of Experience', icon: 'badge' },
+      { value: 25, suffix: '+', label: 'Years of Experience', icon: 'clock' },
     ],
   },
   reviews: {
