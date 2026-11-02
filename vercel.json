@@ -2,5 +2,5 @@
   "buildCommand": "npm run build && node scripts/vercel-prep.js",
   "outputDirectory": "dist",
   "functions": { "api/page.js": { "includeFiles": "dist/app.html" } },
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/api/page?p=/$1" }]
+  "rewrites": [{ "source": "/api/(.*)", "destination": "/api/router?p=$1" }, { "source": "/((?!api/).*)", "destination": "/api/page?p=/$1" }]
 }
