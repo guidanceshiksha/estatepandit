@@ -6,10 +6,10 @@ export function Logo({ dark = false, size = 44 }) {
       <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden>
         <defs>
           <linearGradient id="lg-bg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#14b8a6" /><stop offset="1" stopColor="#07423c" />
+            <stop offset="0" stopColor="#22a45d" /><stop offset="1" stopColor="#0a3b2a" />
           </linearGradient>
           <linearGradient id="lg-gold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#ffb59d" /><stop offset="1" stopColor="#f0502e" />
+            <stop offset="0" stopColor="#ffa3aa" /><stop offset="1" stopColor="#c1121f" />
           </linearGradient>
         </defs>
         <rect x="2" y="2" width="52" height="52" rx="15" fill="url(#lg-bg)" />

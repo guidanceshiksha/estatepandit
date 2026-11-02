@@ -8,7 +8,7 @@ FONTS = r'C:\Windows\Fonts'
 SANSB = ['segoeuib.ttf', 'arialbd.ttf']
 SANS = ['segoeui.ttf', 'arial.ttf']
 
-TEAL, DEEP, CORAL, MINT = (20, 184, 166), (7, 66, 60), (255, 154, 122), (94, 234, 212)
+TEAL, DEEP, CORAL, MINT = (34, 164, 93), (10, 59, 42), (255, 123, 132), (123, 227, 163)
 
 
 def font(names, size):
@@ -68,7 +68,7 @@ bg = bg.crop((x0, y0, x0 + W, y0 + H))
 overlay = Image.new('RGBA', (W, H))
 od = ImageDraw.Draw(overlay)
 for x in range(W):
-    od.line((x, 0, x, H), fill=(3, 31, 28, int(225 - 150 * (x / W))))
+    od.line((x, 0, x, H), fill=(6, 36, 26, int(225 - 150 * (x / W))))
 bg = Image.alpha_composite(bg.convert('RGBA'), overlay)
 d = ImageDraw.Draw(bg)
 logo = icon(120)
@@ -79,7 +79,7 @@ d.text((70, 300), 'PANDIT ESTATE', font=font(SANSB, 84), fill='white', anchor='l
 d.text((70, 372), 'Your Trusted Dwarka', font=font(SANSB, 48), fill='white', anchor='ls')
 d.text((70, 432), 'Property Partner', font=font(SANSB, 48), fill=MINT, anchor='ls')
 d.text((70, 490), 'DDA Flats · Society Flats · Plots · L-Zone Land · Rentals', font=font(SANS, 28), fill=(225, 245, 241), anchor='ls')
-d.rounded_rectangle((70, 520, 560, 586), radius=14, fill=(240, 80, 46))
+d.rounded_rectangle((70, 520, 560, 586), radius=14, fill=(193, 18, 31))
 d.text((315, 553), 'Call +91 98110 93769', font=font(SANSB, 30), fill='white', anchor='mm')
 bg.convert('RGB').save(os.path.join(PUB, 'og-default.jpg'), quality=86, optimize=True)
 print('assets written')

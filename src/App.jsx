@@ -713,7 +713,7 @@ function Contact() {
   const [svg, setSvg] = useState('')
   const vcard = buildVcard(site)
   useEffect(() => {
-    QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#07423c', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
+    QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#0a3b2a', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
   }, [vcard])
   const download = () => {
     const url = URL.createObjectURL(new Blob([vcard], { type: 'text/vcard' }))
@@ -889,7 +889,7 @@ export default function App({ page = 'home', slug = '' }) {
       <motion.div className="progress" style={{ scaleX: w }} />
       <Nav />
       {page === 'blog' ? <BlogPage /> : page === 'post' ? <PostPage slug={slug} /> : (
-        <><Hero /><About /><Services /><Listings /><Stats /><Testimonials /><Why /><Loans /><Referral /><Partners /><Areas /><Blog /><FAQ /><Contact /><MapSection /></>
+        <><Hero /><About /><Services /><Listings /><Stats /><Why /><Loans /><Referral /><Partners /><Areas /><Blog /><Testimonials /><FAQ /><Contact /><MapSection /></>
       )}
       <Footer />
       <Floaters />

@@ -19,7 +19,7 @@ export const defaults = {
     heroEyebrow: 'Dwarka · Delhi NCR',
     heroTitle: 'PANDIT ESTATE\nYour Trusted Dwarka\nProperty Partner',
     heroSub: 'DDA flats, society flats, plots and rentals in Dwarka, with 25+ years of local experience.',
-    heroSlides: [H('Skyline view.jpg'), H('luxurious livng.jpg'), H('modern baclony.jpg'), H('Moderin living room.jpg')],
+    heroSlides: ['/images/hero/hero-1.jpg', '/images/hero/hero-2.jpg', '/images/hero/hero-3.jpg', '/images/hero/hero-4.jpg'],
     dealsIn: ['DDA Plots', 'Society Flats', 'DDA Flats', 'SFS Flats', 'Commercial Plots', 'Land in L-Zone', 'Society Membership in L-Zone'],
     propertyTypes: ['DDA Flat', 'SFS Flat', 'Society Flat', 'DDA Plot', 'Residential Plot', 'Commercial Plot', 'Land in L-Zone', 'Society Membership (L-Zone)', 'Apartment / Flat', 'Builder Floor', 'Independent House / Villa', 'Penthouse', 'Studio Apartment', 'Commercial Shop', 'Office Space', 'Showroom', 'Warehouse / Godown', 'PG / Co-living', 'Farmhouse'],
     budgets: ['Under ₹25 Lac', '₹25 – 50 Lac', '₹50 Lac – 1 Cr', '₹1 – 2 Cr', '₹2 – 5 Cr', '₹5 Cr+'],
@@ -45,16 +45,16 @@ export const defaults = {
     title: 'Our Services',
     sub: 'From first viewing to final registration, under one roof.',
     items: [
-      { title: 'Property Buying', line: 'Hand-picked flats, floors and plots in Dwarka with verified papers and fair pricing.', cta: 'Buy Property', need: 'Buy', icon: 'home', image: H('Moderin living room.jpg') },
-      { title: 'Property Selling', line: 'Professional listing, photography and genuine buyers so your property sells at the best price.', cta: 'Sell Property', need: 'Sell', icon: 'tag', image: H('luxury master room.jpg') },
-      { title: 'Renting', line: 'Quality rentals for families, bachelors and professionals, ready to move in.', cta: 'Find a Rental', need: 'Rent', icon: 'key', image: H('guest bedroom.jpg') },
-      { title: 'DDA & SFS Flats', line: 'DDA flats and SFS flats with clear papers, transfer help and fair pricing.', cta: 'Enquire Now', need: 'DDA plot / flat', icon: 'building', image: H('Skyline view.jpg') },
-      { title: 'Commercial Plots', line: 'Commercial plots and shops in Dwarka for business owners and investors.', cta: 'Enquire Now', need: 'Commercial plot', icon: 'plot', image: H('Modern dinig area.jpg') },
-      { title: 'Land in L-Zone', line: 'Land and plots in L-Zone with title checks and documentation support.', cta: 'Enquire Now', need: 'Land in L-Zone', icon: 'pin', image: H('modern baclony.jpg') },
-      { title: 'Society Membership', line: 'Society membership in L-Zone, transfers and society flats handled end to end.', cta: 'Get Membership', need: 'Society membership (L-Zone)', icon: 'badge', image: H('luxurious livng.jpg') },
-      { title: 'Legal Assistance', line: 'Title checks, sale deeds, registration and mutation handled by experts.', cta: 'Get Legal Help', need: 'Legal help', icon: 'shield', image: H('study room.jpg') },
-      { title: 'Home Loan Help', line: 'We help you apply with leading banks and sort the paperwork.', cta: 'Check Eligibility', need: 'Home loan', icon: 'bank', image: H('modern kitchern.jpg') },
-      { title: 'Site Visits', line: 'Free guided visits, scheduled around your time, to shortlisted properties.', cta: 'Book a Visit', need: 'Site visit', icon: 'check', image: H('theater room.jpg') },
+      { title: 'Property Buying', line: 'Hand-picked flats, floors and plots in Dwarka with verified papers and fair pricing.', cta: 'Buy Property', need: 'Buy', icon: 'home', image: '/images/services/property-buying.jpg' },
+      { title: 'Property Selling', line: 'Professional listing, photography and genuine buyers so your property sells at the best price.', cta: 'Sell Property', need: 'Sell', icon: 'tag', image: '/images/services/property-selling.jpg' },
+      { title: 'Renting', line: 'Quality rentals for families, bachelors and professionals, ready to move in.', cta: 'Find a Rental', need: 'Rent', icon: 'key', image: '/images/services/renting.jpg' },
+      { title: 'DDA & SFS Flats', line: 'DDA flats and SFS flats with clear papers, transfer help and fair pricing.', cta: 'Enquire Now', need: 'DDA plot / flat', icon: 'building', image: '/images/services/dda-sfs-flats.jpg' },
+      { title: 'Commercial Plots', line: 'Commercial plots and shops in Dwarka for business owners and investors.', cta: 'Enquire Now', need: 'Commercial plot', icon: 'plot', image: '/images/services/commercial-plots.jpg' },
+      { title: 'Land in L-Zone', line: 'Land and plots in L-Zone with title checks and documentation support.', cta: 'Enquire Now', need: 'Land in L-Zone', icon: 'pin', image: '/images/services/land-l-zone.jpg' },
+      { title: 'Society Membership', line: 'Society membership in L-Zone, transfers and society flats handled end to end.', cta: 'Get Membership', need: 'Society membership (L-Zone)', icon: 'badge', image: '/images/services/society-membership.jpg' },
+      { title: 'Legal Assistance', line: 'Title checks, sale deeds, registration and mutation handled by experts.', cta: 'Get Legal Help', need: 'Legal help', icon: 'shield', image: '/images/services/legal-assistance.jpg' },
+      { title: 'Home Loan Help', line: 'We help you apply with leading banks and sort the paperwork.', cta: 'Check Eligibility', need: 'Home loan', icon: 'bank', image: '/images/services/home-loan.jpg' },
+      { title: 'Site Visits', line: 'Free guided visits, scheduled around your time, to shortlisted properties.', cta: 'Book a Visit', need: 'Site visit', icon: 'check', image: '/images/services/site-visits.jpg' },
     ],
   },
   properties: {
@@ -128,23 +128,26 @@ export const defaults = {
   },
   loans: {
     eyebrow: 'Home Loan Assistance',
-    title: 'Home Loan Help, From Application to Approval',
-    sub: 'We work with leading banks and guide you through every step, so buying your home feels simple.',
+    title: 'Home Loan Assistance for Your Dream Home',
+    sub: 'We guide you through applying for a home loan with leading banks and help you get your papers ready.',
     cta: 'Check Loan Eligibility',
-    bankTitle: 'Banks we help you with',
-    note: 'Loan approval and terms are decided by the bank. We help with guidance and paperwork.',
+    bankTitle: 'Banks you can apply with',
+    note: 'Loan approval, interest rates and terms are decided by each bank. Bank names and logos belong to their owners; Pandit Estate provides guidance only.',
     steps: [
-      { icon: 'check', title: 'Check eligibility', text: 'We help you understand how much you can borrow.' },
-      { icon: 'bank', title: 'Choose the right bank', text: 'Compare options from leading banks.' },
-      { icon: 'file', title: 'Sort the paperwork', text: 'Documents prepared and checked for you.' },
-      { icon: 'key', title: 'Get the keys', text: 'Support right up to registration.' },
+      { icon: 'check', title: 'Check eligibility', text: 'Understand how much you can borrow.' },
+      { icon: 'bank', title: 'Choose a bank', text: 'Compare options from leading banks.' },
+      { icon: 'file', title: 'Prepare papers', text: 'Documents checked and organised for you.' },
+      { icon: 'key', title: 'Complete the purchase', text: 'Guidance up to registration.' },
     ],
     banks: [
-      { name: 'SBI', full: 'State Bank of India', logo: '' },
-      { name: 'HDFC Bank', full: 'HDFC Bank', logo: '' },
-      { name: 'ICICI Bank', full: 'ICICI Bank', logo: '' },
-      { name: 'Axis Bank', full: 'Axis Bank', logo: '' },
-      { name: 'PNB', full: 'Punjab National Bank', logo: '' },
+      { name: 'State Bank of India', full: '', logo: '/images/banks/sbi.svg' },
+      { name: 'HDFC Bank', full: '', logo: '/images/banks/hdfc.svg' },
+      { name: 'ICICI Bank', full: '', logo: '/images/banks/icici.svg' },
+      { name: 'Axis Bank', full: '', logo: '/images/banks/axis.svg' },
+      { name: 'Punjab National Bank', full: '', logo: '/images/banks/pnb.svg' },
+      { name: 'Bank of Baroda', full: '', logo: '/images/banks/bob.png' },
+      { name: 'Canara Bank', full: '', logo: '/images/banks/canara.svg' },
+      { name: 'Union Bank of India', full: '', logo: '/images/banks/union.svg' },
     ],
   },
   referral: {
@@ -178,17 +181,14 @@ export const defaults = {
     site: [
       { q: 'How do I ask about a property?', a: 'Tap Enquire Now on any property and share your name and number. We will call you.' },
       { q: 'Can I book a site visit here?', a: 'Yes. Tap Book Visit on a property and choose a date and time.' },
-      { q: 'Are the properties on this site genuine?', a: 'Yes. Our team checks the details and papers before a property is shown.' },
       { q: 'How do I search for a property?', a: 'Use the search box at the top. Pick the type, location and budget.' },
       { q: 'How can I reach you quickly?', a: 'Use the Call Now or WhatsApp buttons. We reply as soon as we can.' },
     ],
     general: [
       { q: 'Which areas do you cover?', a: 'All sectors of Dwarka and nearby places in Delhi NCR.' },
       { q: 'What kinds of property do you deal in?', a: 'DDA flats and plots, SFS flats, society flats, commercial plots, land in L-Zone and rentals.' },
-      { q: 'Can you help me get a home loan?', a: 'Yes. We guide you with leading banks and help with the paperwork.' },
+      { q: 'Can you help me get a home loan?', a: 'Yes. We guide you on applying with leading banks and help with the paperwork.' },
       { q: 'Do you help with legal papers?', a: 'Yes. We help with title checks, registration and transfer.' },
-      { q: 'What is society membership in L-Zone?', a: 'It is the right to a plot or flat that is held through membership of a housing society.' },
-      { q: 'Can I refer someone to you?', a: 'Yes. Share their details through the Refer a Client button and we will take it from there.' },
     ],
   },
   blogs: {
@@ -196,7 +196,7 @@ export const defaults = {
     sub: 'What is happening in Dwarka, explained simply, with sources.',
     items: [
       post('dwarka-property-2026-what-is-driving-demand', 'Dwarka Property in 2026: What Is Driving Demand for Homes',
-        'Metro links, new DDA schemes and the Dwarka Expressway are shaping where buyers look this year.', 'Market News', '5 min read', '2026-11-01', H('Skyline view.jpg'),
+        'Metro links, new DDA schemes and the Dwarka Expressway are shaping where buyers look this year.', 'Market News', '5 min read', '2026-11-01', '/images/blog/dwarka-property-2026.jpg',
         `If you have been following Dwarka property over the last few years, you will have noticed the same question in almost every conversation: is this still a good time to buy? The honest answer depends on the sector, the type of home and your plan for it. What we can do is lay out what is actually happening around Dwarka right now, using public sources, so you can decide with clear eyes.
 
 ## Metro and airport access keep Dwarka in demand
@@ -229,7 +229,7 @@ Dwarka property is not a fast-flip market. It rewards patient buyers who pick th
           ['DDA housing circulars', 'https://dda.gov.in/housing/housing-circulars'],
         ], 'Dwarka property, Dwarka real estate 2026, DDA flats in Dwarka, Dwarka metro'),
       post('yashobhoomi-dwarka-airport-metro-home-buyers', 'Yashobhoomi and the Airport Metro: What It Means for Dwarka Home Buyers',
-        'The Airport Express extension changed how Dwarka connects to the airport and the city centre.', 'Infrastructure', '4 min read', '2026-10-28', H('luxurious livng.jpg'),
+        'The Airport Express extension changed how Dwarka connects to the airport and the city centre.', 'Infrastructure', '4 min read', '2026-10-28', '/images/blog/yashobhoomi-airport-metro.jpg',
         `Few projects have changed daily travel in Dwarka as much as the Airport Express extension to Yashobhoomi. If you are thinking about buying or renting here, it is worth understanding what the line actually offers, and what it does not.
 
 ## What was built
@@ -263,7 +263,7 @@ Please confirm timings and services with DMRC before planning your travel.`,
           ['Housing.com: PM inaugurates Airport Express Line extension', 'https://housing.com/news/pm-inaugurates-dehi-airport-metro-express-line-extension'],
         ], 'Yashobhoomi, Yashobhoomi Dwarka, Airport Express metro Dwarka, Dwarka Sector 21 metro, Dwarka Sector 25'),
       post('dda-flats-in-dwarka-latest-scheme-updates', 'DDA Flats in Dwarka: Latest Scheme Updates and How to Prepare',
-        'A plain-language look at recent DDA schemes that include Dwarka and what to check before you apply.', 'DDA Updates', '5 min read', '2026-10-24', H('Moderin living room.jpg'),
+        'A plain-language look at recent DDA schemes that include Dwarka and what to check before you apply.', 'DDA Updates', '5 min read', '2026-10-24', '/images/blog/dda-flats-dwarka.jpg',
         `DDA flats in Dwarka have always had a loyal set of buyers. They come with the trust of a government agency, and many of them sit in well-planned sectors. If you are thinking about applying, here is a simple summary of what has been reported recently, and a short checklist to prepare.
 
 ## What was reported for 2026
@@ -293,7 +293,7 @@ At Pandit Estate we help buyers compare DDA flats in Dwarka with society flats a
           ['Housing.com: How to apply for DDA housing schemes', 'https://housing.com/news/apply-dda-housing-schemes/'],
         ], 'DDA flats, DDA flats in Dwarka, DDA housing scheme 2026, DDA e-auction, Dwarka DDA flats price'),
       post('dwarka-expressway-vs-dwarka-delhi', 'Dwarka Expressway vs Dwarka Delhi: Which One Fits Your Budget?',
-        'The names sound alike but the two markets are very different. Here is how to compare them.', 'Buyer Guide', '5 min read', '2026-10-20', H('modern baclony.jpg'),
+        'The names sound alike but the two markets are very different. Here is how to compare them.', 'Buyer Guide', '5 min read', '2026-10-20', '/images/blog/dwarka-expressway.jpg',
         `We often meet buyers who ask about the Dwarka Expressway when they actually mean Dwarka in Delhi, or the other way round. The two are connected by name and by road, but they are different markets with different prices, so it helps to know the difference.
 
 ## Two places, one name
@@ -326,7 +326,7 @@ Figures quoted above come from the sources listed below and may have changed, so
           ['Business Standard: Gurugram section of Dwarka Expressway', 'https://www.business-standard.com/india-news/pm-to-inaugurate-gurugram-section-of-dwarka-expressway-on-march-11-details-124030700789_1.html'],
         ], 'Dwarka Expressway, Dwarka Expressway price, Dwarka vs Gurugram, Dwarka Delhi flats'),
       post('society-membership-in-l-zone-what-to-check', 'Society Membership in L-Zone: What Buyers Should Check',
-        'How society membership works and the simple checks that protect you before you pay.', 'Guide', '4 min read', '2026-10-15', H('study room.jpg'),
+        'How society membership works and the simple checks that protect you before you pay.', 'Guide', '4 min read', '2026-10-15', '/images/blog/society-membership-l-zone.jpg',
         `Many people in Dwarka hear the phrase membership in L-Zone from a dealer and nod along, without being sure what it really means. Here is a plain explanation, and a few checks that can save you from trouble.
 
 ## What society membership means
@@ -358,7 +358,7 @@ This article is general information, not legal advice. For a specific property, 
           ['Delhi Development Authority: Housing', 'https://dda.gov.in/housing/housing-scheme'],
         ], 'society membership, society membership L-Zone, L-Zone land, society flats Dwarka, transfer of society membership'),
       post('home-loan-checklist-for-dwarka-buyers', 'Home Loan Checklist for Dwarka Buyers: Documents and Simple Tips',
-        'Get your paperwork ready and avoid common delays when applying for a home loan.', 'Home Loan', '4 min read', '2026-10-10', H('modern kitchern.jpg'),
+        'Get your paperwork ready and avoid common delays when applying for a home loan.', 'Home Loan', '4 min read', '2026-10-10', '/images/blog/home-loan-checklist.jpg',
         `Most buyers in Dwarka take a home loan, and most delays happen for one simple reason: the papers are not ready. A little preparation makes the whole process smoother. Here is a practical checklist, written for first-time borrowers.
 
 ## Start with your budget
