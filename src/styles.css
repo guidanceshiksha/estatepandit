@@ -452,8 +452,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 .brand img{display:block;max-width:100%}
 .brand-tile{background:#fff;border-radius:8px;padding:8px 12px}
 .logo{display:inline-flex;align-items:center;flex:none}
-@media(max-width:720px){.nav .logo img{height:38px!important}}
-@media(max-width:420px){.nav .logo img{height:34px!important}}
+@media(max-width:900px){.nav .logo img{height:58px!important}}
+@media(max-width:720px){.nav .logo img{height:52px!important}}
+@media(max-width:420px){.nav .logo img{height:46px!important}}
 
 /* ===== office photo beside the map ===== */
 .visit{grid-template-columns:.78fr 1.22fr}

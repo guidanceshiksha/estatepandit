@@ -155,7 +155,7 @@ function Nav() {
   const close = () => { setOpen(false); setMenu(false) }
   return (
     <motion.header className="nav" initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.6 }}>
-      <a href="/" className="logo" aria-label="Pandit Estate home"><Logo size={46} /></a>
+      <a href="/" className="logo" aria-label="Pandit Estate home"><Logo size={68} /></a>
       <nav className={open ? 'links open' : 'links'}>
         {navLinks.slice(0, 3).map(([l, h]) => <a key={l} href={h} onClick={close}>{l}</a>)}
         <div className="dd" onMouseEnter={() => setMenu(true)} onMouseLeave={() => setMenu(false)}>
