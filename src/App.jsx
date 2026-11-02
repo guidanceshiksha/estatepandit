@@ -196,61 +196,62 @@ function Hero() {
       message: `Looking for: ${f.type || 'any type'} in ${f.location || 'any location'}. Budget: ${budget}.`,
     })
   }
+  const sold = track.items[2]
   return (
     <section id="home" className="hero">
       <div className="slides" aria-hidden>
         <AnimatePresence initial={false}>
           <motion.div key={slide} className="slide" style={{ backgroundImage: slides[slide % slides.length] ? `url(${slides[slide % slides.length]})` : undefined }}
-            initial={{ opacity: 0, scale: 1 }} animate={{ opacity: 1, scale: 1.12 }} exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 1 }} animate={{ opacity: 1, scale: 1.06 }} exit={{ opacity: 0 }}
             transition={{ opacity: { duration: 1.2 }, scale: { duration: 8, ease: 'linear' } }} />
         </AnimatePresence>
       </div>
-      <div className="hero-shade" />
-      <motion.div className="hero-in" initial="hidden" animate="show" variants={stagger}>
-        <motion.span className="eyebrow light" variants={fade}>{site.heroEyebrow}</motion.span>
-        <motion.h1 variants={fade}>
-          {site.heroTitle.split('\n').map((line, i, all) => (
-            <span key={i} className={i === 0 ? 'h-brand' : i === all.length - 1 ? 'h-hl' : 'h-mid'}>{line}</span>
-          ))}
-        </motion.h1>
-        <motion.p variants={fade} className="hero-sub">{site.heroSub}</motion.p>
-        <motion.div variants={fade} className="hero-cta">
-          <a className="btn gold" href={tel(site.phone)}><Ic n="phone" size={18} /> Call Now</a>
-          <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={18} /> WhatsApp</a>
+      <div className="hero-wrap">
+        <motion.div className="hero-card" initial="hidden" animate="show" variants={stagger}>
+          <motion.span className="eyebrow pill" variants={fade}>{site.heroEyebrow}</motion.span>
+          <motion.h1 variants={fade}>
+            {site.heroTitle.split('\n').map((line, i, all) => (
+              <span key={i} className={i === 0 ? 'h-brand' : i === all.length - 1 ? 'h-hl' : 'h-mid'}>{line}</span>
+            ))}
+          </motion.h1>
+          <motion.p variants={fade} className="hero-sub">{site.heroSub}</motion.p>
+          <motion.div variants={fade} className="hero-cta">
+            <a className="btn" href={tel(site.phone)}><Ic n="phone" size={18} /> Call Now</a>
+            <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={18} /> WhatsApp</a>
+          </motion.div>
+          <motion.ul variants={fade} className="hero-trust">
+            <li><GoogleG size={16} /> <b>{reviews.score}</b> <Stars /> <span>{reviews.count} reviews</span></li>
+            {sold && <li><Ic n="key" size={16} /> <b>{Number(sold.value).toLocaleString('en-IN')}{sold.suffix}</b> <span>{sold.label}</span></li>}
+          </motion.ul>
+          <motion.form variants={fade} className="search" onSubmit={search}>
+            <select name="type" aria-label="Property type" defaultValue="">
+              <option value="" disabled>Property Type</option>
+              <option>All Types</option>
+              {site.propertyTypes.map((t) => <option key={t}>{t}</option>)}
+            </select>
+            <select name="location" aria-label="Location" defaultValue="">
+              <option value="" disabled>Location</option>
+              <AreaOptions />
+            </select>
+            <select name="budget" aria-label="Budget" defaultValue="" onChange={(e) => setCustom(e.target.value === 'custom')}>
+              <option value="" disabled>Budget</option>
+              {site.budgets.map((b) => <option key={b}>{b}</option>)}
+              <option value="custom">Custom Budget…</option>
+            </select>
+            {custom && (
+              <div className="custom-budget">
+                <input name="min" type="number" min="0" placeholder="Min (₹ Lac)" aria-label="Minimum budget in lakh" />
+                <span>to</span>
+                <input name="max" type="number" min="0" placeholder="Max (₹ Lac)" aria-label="Maximum budget in lakh" />
+              </div>
+            )}
+            <button className="btn">Find Your Home</button>
+          </motion.form>
+          <motion.div variants={fade} className="deals">
+            <span>Deals in:</span>{site.dealsIn.map((d) => <a key={d} href="#listings" className="deal">{d}</a>)}
+          </motion.div>
         </motion.div>
-        <motion.ul variants={fade} className="hero-trust">
-          <li><GoogleG size={16} /> <b>{reviews.score}</b> <Stars /> <span>{reviews.count} reviews</span></li>
-          <li><Ic n="key" size={16} /> <b>{track.items[2]?.value?.toLocaleString('en-IN')}{track.items[2]?.suffix}</b> <span>{track.items[2]?.label}</span></li>
-        </motion.ul>
-        <motion.form variants={fade} className="search" onSubmit={search}>
-          <select name="type" aria-label="Property type" defaultValue="">
-            <option value="" disabled>Property Type</option>
-            <option>All Types</option>
-            {site.propertyTypes.map((t) => <option key={t}>{t}</option>)}
-          </select>
-          <select name="location" aria-label="Location" defaultValue="">
-            <option value="" disabled>Location</option>
-            <AreaOptions />
-          </select>
-          <select name="budget" aria-label="Budget" defaultValue="" onChange={(e) => setCustom(e.target.value === 'custom')}>
-            <option value="" disabled>Budget</option>
-            {site.budgets.map((b) => <option key={b}>{b}</option>)}
-            <option value="custom">Custom Budget…</option>
-          </select>
-          {custom && (
-            <div className="custom-budget">
-              <input name="min" type="number" min="0" placeholder="Min (₹ Lac)" aria-label="Minimum budget in lakh" />
-              <span>to</span>
-              <input name="max" type="number" min="0" placeholder="Max (₹ Lac)" aria-label="Maximum budget in lakh" />
-            </div>
-          )}
-          <button className="btn">Find Your Home</button>
-        </motion.form>
-        <motion.div variants={fade} className="deals">
-          <span>Deals in:</span>{site.dealsIn.map((d) => <a key={d} href="#listings" className="deal">{d}</a>)}
-        </motion.div>
-      </motion.div>
-      <a href="#about" className="scroll-mouse" aria-label="Scroll down"><span><i /></span><em>Scroll</em></a>
+      </div>
       <div className="dots">
         {slides.map((_, i) => <button key={i} aria-label={`Slide ${i + 1}`} className={i === slide % slides.length ? 'on' : ''} onClick={() => setSlide(i)} />)}
       </div>
@@ -300,7 +301,7 @@ function Listings() {
   const [saved, setSaved] = useState({})
   const items = properties.items.filter((p) => p.active !== false)
   return (
-    <section id="listings" className="sec tint">
+    <section id="listings" className="sec">
       <Title sub={properties.sub}>{properties.title}</Title>
       <Group className="grid g3">
         {items.map((p, i) => (
@@ -374,20 +375,17 @@ function About() {
 const Stats = () => {
   const { track } = useContent()
   return (
-    <section className="stats">
-      <div className="stats-in">
-        <Title light sub={track.sub}>{track.title}</Title>
-        <Group className="grid g4">
-          {track.items.map((s) => (
-            <Item key={s.label} className="stat" lift={-8}>
-              <span className="sico"><Ic n={s.icon} size={24} /></span>
-              <b><Counter to={Number(s.value) || 0} suffix={s.suffix} prefix={s.prefix} /></b>
-              <i className="bar"><motion.em initial={{ width: 0 }} whileInView={{ width: '100%' }} viewport={{ once: true }} transition={{ duration: 1.6 }} /></i>
-              <span className="slabel">{s.label}</span>
-            </Item>
-          ))}
-        </Group>
-      </div>
+    <section className="sec stats">
+      <Title sub={track.sub}>{track.title}</Title>
+      <Group className="stat-grid">
+        {track.items.map((s) => (
+          <Item key={s.label} className="stat" lift={-3}>
+            <span className="sico"><Ic n={s.icon} size={20} /></span>
+            <b><Counter to={Number(s.value) || 0} suffix={s.suffix} prefix={s.prefix} /></b>
+            <span className="slabel">{s.label}</span>
+          </Item>
+        ))}
+      </Group>
     </section>
   )
 }
@@ -450,30 +448,22 @@ function Why() {
   const { why, reviews } = useContent()
   const enquire = useEnquiry()
   return (
-    <section className="sec tint why">
-      <div className="why-grid">
-        <Reveal className="why-intro">
-          <span className="eyebrow">Why Pandit Estate</span>
-          <h2>{why.title}</h2>
-          <p>{why.sub}</p>
-          <div className="why-score">
-            <b>{reviews.score}<span>★</span></b>
-            <small>{why.scoreNote}</small>
-          </div>
-          <button className="btn" onClick={() => enquire({ title: 'Speak to an advisor', source: 'Why choose us' })}>Speak to an Advisor <Ic n="arrow" size={16} /></button>
-        </Reveal>
-        <Group className="why-cards">
-          {why.items.map((w, i) => (
-            <Item key={w.title} className="wcard">
-              <span className="wnum">0{i + 1}</span>
-              <motion.span className="wicon" whileHover={{ rotate: 8, scale: 1.1 }}><Ic n={w.icon} size={26} /></motion.span>
-              <h3>{w.title}</h3>
-              <p>{w.text}</p>
-              <span className="wline" />
-            </Item>
-          ))}
-        </Group>
-      </div>
+    <section className="sec why">
+      <Title sub={why.sub}>{why.title}</Title>
+      <Group className="grid g3">
+        {why.items.map((w, i) => (
+          <Item key={w.title} className="wcard" lift={-4}>
+            <span className="wnum">0{i + 1}</span>
+            <span className="wicon"><Ic n={w.icon} size={24} /></span>
+            <h3>{w.title}</h3>
+            <p>{w.text}</p>
+          </Item>
+        ))}
+      </Group>
+      <Reveal className="why-foot">
+        <div className="why-score"><GoogleG size={22} /><b>{reviews.score}</b><Stars /><span>{why.scoreNote}</span></div>
+        <button className="btn" onClick={() => enquire({ title: 'Speak to an advisor', source: 'Why choose us' })}>Speak to an Advisor <Ic n="arrow" size={16} /></button>
+      </Reveal>
     </section>
   )
 }
@@ -483,25 +473,25 @@ function Loans() {
   const { loans } = useContent()
   const enquire = useEnquiry()
   return (
-    <section id="loans" className="sec loans-sec">
+    <section id="loans" className="sec">
       <Reveal className="loans">
         <div className="loans-l">
-          <span className="eyebrow light">{loans.eyebrow}</span>
+          <span className="eyebrow">{loans.eyebrow}</span>
           <h2>{loans.title}</h2>
-          <p>{loans.sub}</p>
+          <p className="lsub">{loans.sub}</p>
           <ol className="lsteps">
             {loans.steps.map((st, i) => (
               <li key={st.title}><span className="lnum">{i + 1}</span><div><b>{st.title}</b><small>{st.text}</small></div></li>
             ))}
           </ol>
-          <button className="btn coral" onClick={() => enquire({ title: 'Home loan assistance', need: 'Home loan', source: 'Home loan section', kind: 'loan' })}>{loans.cta} <Ic n="arrow" size={16} /></button>
+          <button className="btn" onClick={() => enquire({ title: 'Home loan assistance', need: 'Home loan', source: 'Home loan section', kind: 'loan' })}>{loans.cta} <Ic n="arrow" size={16} /></button>
         </div>
         <div className="loans-r">
           <h3><Ic n="bank" size={20} /> {loans.bankTitle}</h3>
           <Group className="banks">
             {loans.banks.map((b) => (
-              <Item key={b.name} className="bank" lift={-4}>
-                {b.logo ? <img src={b.logo} alt={b.full || b.name} /> : <><span className="bank-ic"><Ic n="bank" size={20} /></span><b>{b.name}</b><small>{b.full}</small></>}
+              <Item key={b.name} className="bank" lift={-3}>
+                {b.logo ? <img src={b.logo} alt={b.full || b.name} loading="lazy" /> : <b>{b.name}</b>}
               </Item>
             ))}
           </Group>
@@ -517,20 +507,20 @@ function Referral() {
   const { referral } = useContent()
   const enquire = useEnquiry()
   return (
-    <section id="refer" className="sec refer-sec">
+    <section id="refer" className="sec">
       <Reveal className="refer">
         <div className="refer-l">
-          <span className="gift"><Ic n="gift" size={30} /></span>
+          <span className="gift"><Ic n="gift" size={26} /></span>
           <span className="eyebrow">{referral.eyebrow}</span>
           <h2>{referral.title}</h2>
           <p>{referral.sub}</p>
-          <button className="btn coral" onClick={() => enquire({ title: 'Refer a client', need: 'Refer a client', source: 'Refer & Earn section', kind: 'referral' })}>{referral.cta} <Ic n="arrow" size={16} /></button>
+          <button className="btn" onClick={() => enquire({ title: 'Refer a client', need: 'Refer a client', source: 'Refer & Earn section', kind: 'referral' })}>{referral.cta} <Ic n="arrow" size={16} /></button>
           <small className="rnote">{referral.note}</small>
         </div>
         <ol className="rsteps">
           {referral.steps.map((st, i) => (
             <li key={st.title}>
-              <span className="ric"><Ic n={st.icon} size={22} /></span>
+              <span className="ric"><Ic n={st.icon} size={20} /></span>
               <div><em>Step {i + 1}</em><b>{st.title}</b><p>{st.text}</p></div>
             </li>
           ))}
@@ -553,25 +543,36 @@ function Partners() {
   )
 }
 
-/* ---------- areas ---------- */
+/* ---------- areas: tabs + compact sector grid ---------- */
 function Areas() {
   const { areas } = useContent()
   const enquire = useEnquiry()
-  const chip = (a, label) => (
-    <Item key={a} className="chip-wrap" lift={-3}>
-      <button className="chip" onClick={() => enquire({ title: `Properties in ${label}`, need: 'Buy', source: `Area: ${label}`, kind: 'area' })}><Ic n="pin" size={14} /> {a}</button>
-    </Item>
-  )
+  const [tab, setTab] = useState('dwarka')
+  const ask = (label) => enquire({ title: `Properties in ${label}`, need: 'Buy', source: `Area: ${label}`, kind: 'area' })
+  const sectors = areas.items.filter((a) => /^Sector \d+/.test(a))
+  const others = areas.items.filter((a) => !/^Sector \d+/.test(a))
+  const ncr = areas.ncr || []
   return (
-    <section className="sec">
+    <section className="sec areas-sec">
       <Title sub={areas.sub}>{areas.title}</Title>
-      <h3 className="agroup">{areas.dwarkaTitle}</h3>
-      <Group className="areas">{areas.items.map((a) => chip(a, a.startsWith('Sector') ? `${a}, Dwarka` : a))}</Group>
-      {areas.ncr?.length > 0 && (
-        <>
-          <h3 className="agroup">{areas.ncrTitle}</h3>
-          <Group className="areas">{areas.ncr.map((a) => chip(a, a))}</Group>
-        </>
+      <Reveal className="tabs" role="tablist">
+        <button role="tab" aria-selected={tab === 'dwarka'} className={tab === 'dwarka' ? 'on' : ''} onClick={() => setTab('dwarka')}>{areas.dwarkaTitle}</button>
+        {ncr.length > 0 && <button role="tab" aria-selected={tab === 'ncr'} className={tab === 'ncr' ? 'on' : ''} onClick={() => setTab('ncr')}>{areas.ncrTitle}</button>}
+      </Reveal>
+      {tab === 'dwarka' ? (
+        <div className="areas-box">
+          <div className="area-top">
+            {others.map((a) => <button key={a} className="area-all" onClick={() => ask(a)}><Ic n="pin" size={15} /> {a}</button>)}
+            <span className="area-hint">Pick a sector number</span>
+          </div>
+          <div className="sectors">
+            {sectors.map((a) => <button key={a} className="sector" aria-label={`${a}, Dwarka`} onClick={() => ask(`${a}, Dwarka`)}>{a.replace('Sector ', '')}</button>)}
+          </div>
+        </div>
+      ) : (
+        <div className="areas-box ncr">
+          {ncr.map((a) => <button key={a} className="chip" onClick={() => ask(a)}><Ic n="pin" size={14} /> {a}</button>)}
+        </div>
       )}
     </section>
   )
@@ -652,11 +653,11 @@ function PostPage({ slug }) {
         </div>
         <div className="post-cta">
           <div><b>Looking for a property in Dwarka?</b><span>Talk to our team for verified options and honest advice.</span></div>
-          <button className="btn gold" onClick={() => enquire({ title: `Enquiry from article: ${post.title}`, source: `Blog: ${post.title}` })}>Request a Callback</button>
+          <button className="btn" onClick={() => enquire({ title: `Enquiry from article: ${post.title}`, source: `Blog: ${post.title}` })}>Request a Callback</button>
         </div>
       </article>
       {more.length > 0 && (
-        <section className="sec tint"><Title>More Articles</Title><Group className="grid g3">{more.map((b) => <BlogCard key={b.id} b={b} />)}</Group></section>
+        <section className="sec"><Title>More Articles</Title><Group className="grid g3">{more.map((b) => <BlogCard key={b.id} b={b} />)}</Group></section>
       )}
     </>
   )
@@ -685,7 +686,7 @@ function FaqColumn({ title, icon, items }) {
 const FAQ = () => {
   const { faqs } = useContent()
   return (
-    <section className="sec tint">
+    <section className="sec">
       <Title sub={faqs.sub}>{faqs.title}</Title>
       <Reveal className="faq-grid">
         <FaqColumn title={faqs.siteTitle} icon="eye" items={faqs.site} />
@@ -709,8 +710,10 @@ function buildVcard(site) {
 
 function Contact() {
   const { site } = useContent()
-  const enquire = useEnquiry()
   const [svg, setSvg] = useState('')
+  const [sent, setSent] = useState(false)
+  const [err, setErr] = useState(false)
+  const lead = useLeadForm({ kind: 'contact', title: 'Contact form enquiry', source: 'Contact form' })
   const vcard = buildVcard(site)
   useEffect(() => {
     QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#1a1d23', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
@@ -721,33 +724,52 @@ function Contact() {
     document.body.appendChild(a); a.click(); a.remove()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
+  const submit = async (e) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const ok = await lead.submit(form)
+    setSent(ok); setErr(!ok)
+    if (ok) form.reset()
+  }
   return (
     <section id="contact" className="sec contact-sec">
-      <Title sub="Call, visit or scan the card to save our number.">Contact Us</Title>
-      <Reveal className="vcard">
-        <div className="vc-left">
-          <Logo dark size={52} />
+      <Title sub="Call us, send an enquiry, or save our contact to your phone.">Contact Us</Title>
+      <Group className="cgrid">
+        <Item className="card cinfo" lift={-3}>
           <h3>{site.ownerName}</h3>
-          <p className="vc-role">Property Consultant · Dwarka</p>
-          <div className="ribbon sm">SALE <i>✱</i> PURCHASE <i>✱</i> RENTING</div>
-          <p className="vc-deals">Deals in: {site.dealsIn.join(' · ')}</p>
-          <ul className="vc-list">
+          <p className="crole">Property Consultant · {site.name}</p>
+          <ul className="clist">
             <li><Ic n="phone" size={18} /><span><a href={tel(site.phone)}>{site.phone}</a>{site.phone2 && <><br /><a href={tel(site.phone2)}>{site.phone2}</a></>}</span></li>
             <li><Ic n="mail" size={18} /><a href={`mailto:${site.email}`}>{site.email}</a></li>
             <li><Ic n="pin" size={18} /><span>{site.address}</span></li>
             {site.hours && <li><Ic n="clock" size={18} /><span>{site.hours}</span></li>}
           </ul>
-          <div className="about-cta">
-            <button className="btn gold" onClick={() => enquire({ title: 'Contact request', source: 'Contact card' })}>Request a Callback</button>
+          <div className="cbtns">
+            <a className="btn" href={tel(site.phone)}><Ic n="phone" size={16} /> Call Now</a>
+            <a className="btn wa-b" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><Social name="whatsapp" size={16} /> WhatsApp</a>
+            <a className="btn ghost" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.mapQuery)}`} target="_blank" rel="noreferrer"><Ic n="directions" size={16} /> Directions</a>
           </div>
-        </div>
-        <div className="vc-right">
+        </Item>
+        <Item className="card cform" lift={-3}>
+          <form onSubmit={submit} onChange={lead.onChange}>
+            <h3>Send an Enquiry</h3>
+            <p className="csub">Tell us what you need and we will call you back.</p>
+            <input name="name" required placeholder="Your name" autoComplete="name" />
+            <input name="phone" required type="tel" pattern="[0-9+ ]{10,15}" placeholder="Mobile number" autoComplete="tel" />
+            <select name="need" defaultValue="Buy">{NEEDS.map((o) => <option key={o}>{o}</option>)}</select>
+            <textarea name="message" rows="3" placeholder="Message (optional)" />
+            <button className="btn">Request Callback</button>
+            {sent && <p className="ok">Thank you! We will call you shortly.</p>}
+            {err && <p className="err">Could not send right now. Please call us.</p>}
+          </form>
+        </Item>
+        <Item className="card cqr" lift={-3}>
           <div className="qr" dangerouslySetInnerHTML={{ __html: svg }} />
           <b>Scan to save our contact</b>
-          <small>Opens Add Contact on your phone with our numbers, email and address.</small>
-          <button className="btn ghost-w" onClick={download}><Ic n="download" size={16} /> Download vCard</button>
-        </div>
-      </Reveal>
+          <small>Adds our numbers, email and address to your phone.</small>
+          <button className="btn ghost" onClick={download}><Ic n="download" size={16} /> Download vCard</button>
+        </Item>
+      </Group>
     </section>
   )
 }
@@ -775,22 +797,13 @@ const MapSection = () => {
 /* ---------- footer ---------- */
 function Footer() {
   const { site, services } = useContent()
-  const [sent, setSent] = useState(false)
-  const [err, setErr] = useState(false)
-  const lead = useLeadForm({ kind: 'callback', title: 'Footer callback request', source: 'Footer form' })
-  const submit = async (e) => {
-    e.preventDefault()
-    const form = e.currentTarget
-    const ok = await lead.submit(form)
-    setSent(ok); setErr(!ok)
-    if (ok) form.reset()
-  }
   const socials = [['facebook', 'Facebook', site.facebook], ['instagram', 'Instagram', site.instagram], ['youtube', 'YouTube', site.youtube], ['linkedin', 'LinkedIn', site.linkedin], ['whatsapp', 'WhatsApp', `https://wa.me/${site.whatsapp}`]]
+  const links = [['Home', '/#home'], ['Featured Properties', '/#listings'], ['About Us', '/#about'], ['Home Loans', '/#loans'], ['Refer & Earn', '/#refer'], ['Blog', '/blog'], ['Contact', '/#contact']]
   return (
     <footer className="footer">
       <div className="fgrid">
         <div className="fbrand">
-          <Logo dark size={52} />
+          <Logo size={48} />
           <p>{site.footerText}</p>
           <div className="socials">
             {socials.map(([n, label, href]) => (
@@ -798,7 +811,8 @@ function Footer() {
             ))}
           </div>
         </div>
-        <div><h4>Services</h4>{services.items.slice(0, 6).map((s) => <a key={s.title} href="/#services">{s.title}</a>)}</div>
+        <div><h4>Services</h4>{services.items.slice(0, 7).map((s) => <a key={s.title} href="/#services">{s.title}</a>)}</div>
+        <div><h4>Quick Links</h4>{links.map(([l, h]) => <a key={l} href={h}>{l}</a>)}</div>
         <div>
           <h4>Contact</h4>
           <a href={tel(site.phone)}><Ic n="phone" size={15} /> {site.phone}</a>
@@ -806,16 +820,8 @@ function Footer() {
           <a href={`mailto:${site.email}`}><Ic n="mail" size={15} /> {site.email}</a>
           <p><Ic n="pin" size={15} /> {site.address}</p>
         </div>
-        <form onSubmit={submit} onChange={lead.onChange}>
-          <h4>Get a Free Callback</h4>
-          <input name="name" required placeholder="Name" />
-          <input name="phone" required type="tel" pattern="[0-9+ ]{10,15}" placeholder="Phone" />
-          <textarea name="message" rows="2" placeholder="Message (optional)" />
-          <button className="btn gold">{sent ? 'Thank you! ✓' : 'Submit'}</button>
-          {err && <small className="err">Could not send. Please call us.</small>}
-        </form>
       </div>
-      <div className="fbar"><span>© {new Date().getFullYear()} {site.name} · All rights reserved</span><span>{site.hours}</span></div>
+      <div className="fbar"><span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span><span>{site.hours}</span></div>
       <div className="mega" aria-hidden>{site.name.toUpperCase()}</div>
     </footer>
   )
