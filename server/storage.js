@@ -47,7 +47,8 @@ export function fileStorage(dir) {
 
 // Supabase Postgres through its REST API (no SDK). One table `pe_kv (ns, k, v jsonb)`, see supabase/schema.sql.
 export function supabaseStorage(url, key) {
-  const base = url.replace(/\/+$/, '') + '/rest/v1/pe_kv'
+  // Accept the bare project URL even if it was pasted with /rest/v1, a trailing slash or spaces.
+  const base = new URL(url.trim()).origin + '/rest/v1/pe_kv'
   const H = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }
   const q = (s) => encodeURIComponent(s)
   const call = async (suffix, init = {}) => {
