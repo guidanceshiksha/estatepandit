@@ -45,7 +45,8 @@ const readBody = (req, limit = 32 * 1024) => new Promise((resolve, reject) => {
 
 export function createCore(storage) {
   const content = async () => {
-    const saved = await storage.getContent()
+    // A database problem must not take the public site down: show the built-in content instead.
+    const saved = await storage.getContent().catch((e) => { console.error('getContent failed:', e.message); return {} })
     return Object.fromEntries(CONTENT_KEYS.map((k) => [k, { ...defaults[k], ...(saved[k] || {}) }]))
   }
 
