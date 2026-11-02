@@ -143,7 +143,7 @@ async function suite(label, base, { loginRequired }) {
   ok(admin.includes('noindex'), t('/admin is noindex'))
   const rb = await (await fetch(base + '/robots.txt')).text()
   ok(rb.includes('Disallow: /admin') && rb.includes('Sitemap:'), t('robots.txt'))
-  for (const f of ['/og-default.jpg', '/favicon.ico', '/apple-touch-icon.png', '/site.webmanifest', '/images/banks/sbi.svg', '/images/hero/hero-1.jpg', '/images/services/renting.jpg', '/images/blog/dwarka-expressway.jpg', '/images/owner.jpg']) {
+  for (const f of ['/og-default.jpg', '/favicon.ico', '/favicon-32.png', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png', '/site.webmanifest', '/images/logo.png', '/images/office.jpg', '/images/banks/sbi.svg', '/images/hero/hero-1.jpg', '/images/services/renting.jpg', '/images/blog/dwarka-expressway.jpg', '/images/owner.jpg']) {
     const x = await fetch(base + f)
     ok(x.status === 200, t(`static ${f}`), String(x.status))
   }

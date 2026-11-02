@@ -5,3 +5,4 @@ dist
 .claude/
 public/images/website image/
 .env*
+source-images/

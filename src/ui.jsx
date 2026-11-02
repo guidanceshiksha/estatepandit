@@ -4,18 +4,11 @@ import {
   Clock, Landmark, Gift, Users, FileText, ArrowRight, Download, Navigation,
 } from 'lucide-react'
 
+// Official logo image. `size` is the height in px; `dark` puts it on a white tile for dark backgrounds.
 export function Logo({ dark = false, size = 44 }) {
   return (
-    <span className={dark ? 'brand dark' : 'brand'}>
-      <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden>
-        <rect x="2" y="2" width="52" height="52" rx="10" fill="#c8102e" />
-        <path d="M11 25 28 11l17 14" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
-        <text x="28" y="43" textAnchor="middle" fontFamily="Cinzel, Georgia, serif" fontWeight="800" fontSize="19" fill="#fff">PE</text>
-      </svg>
-      <span className="brand-txt">
-        <b>PANDIT</b>
-        <i>ESTATE</i>
-      </span>
+    <span className={dark ? 'brand brand-tile' : 'brand'}>
+      <img src="/images/logo.png" alt="Pandit Estate – Property Dealers & Consultants" height={size} style={{ height: size, width: 'auto' }} />
     </span>
   )
 }

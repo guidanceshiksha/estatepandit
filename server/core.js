@@ -193,7 +193,7 @@ export function createCore(storage) {
     let title = c.seo.title, description = c.seo.description, image = abs(o, c.seo.ogImage) || o + '/og-default.jpg', canonical = o + '/'
     let keywords = c.seo.keywords, published = ''
     const business = {
-      '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: c.site.name, url: o + '/', telephone: c.site.phone, email: c.site.email, image,
+      '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: c.site.name, url: o + '/', telephone: c.site.phone, email: c.site.email, image, logo: o + '/images/logo.png',
       address: { '@type': 'PostalAddress', streetAddress: c.site.address, addressLocality: 'Dwarka', addressRegion: 'New Delhi', addressCountry: 'IN' },
       areaServed: c.areas.items,
       sameAs: [c.site.facebook, c.site.instagram, c.site.youtube, c.site.linkedin].filter(Boolean),

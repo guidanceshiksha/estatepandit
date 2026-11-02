@@ -447,3 +447,18 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 .map-bar span{display:inline-flex;align-items:center;gap:8px}
 @media(max-width:900px){.visit{grid-template-columns:1fr}.office,.mapbox{min-height:0}.office-img{min-height:240px;aspect-ratio:16/10;flex:none}.mapbox iframe{min-height:320px}}
 @media(max-width:720px){.qr{width:200px;height:200px}}
+
+/* ===== official logo image ===== */
+.brand img{display:block;max-width:100%}
+.brand-tile{background:#fff;border-radius:8px;padding:8px 12px}
+.logo{display:inline-flex;align-items:center;flex:none}
+@media(max-width:720px){.nav .logo img{height:38px!important}}
+@media(max-width:420px){.nav .logo img{height:34px!important}}
+
+/* ===== office photo beside the map ===== */
+.visit{grid-template-columns:.78fr 1.22fr}
+.office-img{flex:none;aspect-ratio:3/4;min-height:0}
+.office-img .bld{object-position:50% 20%}
+.office,.mapbox{min-height:0}
+.mapbox iframe{min-height:360px}
+@media(max-width:900px){.visit{grid-template-columns:1fr}.office-img{aspect-ratio:4/5}.mapbox iframe{min-height:320px}}

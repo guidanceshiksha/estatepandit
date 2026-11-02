@@ -59,23 +59,13 @@ Search karte waqt ye words use karo, aur **sirf free-to-use** photos chuno (Unsp
 
 Download ke baad naam upar ke table jaisa rakho aur sahi folder mein daalo.
 
-## 5. Logo / Board / Banner ke liye prompts
+## 5. Logo, favicon, office photo
 
-**A. Text wala official logo (board ya banner ke liye)**
+Ye teen files `source-images/` mein rakho (project folder, website par nahi jati):
+`Official logo estate.png`, `pandit favicon.png`, `office front.png`. Phir chalao:
 
-> Professional real-estate signboard logo, wordmark only, bold uppercase "PANDIT ESTATE" in a strong geometric sans-serif (like Poppins ExtraBold), deep forest green (#0a3b2a) letters with a thin red (#c1121f) underline bar, tagline "PROPERTY DEALERS & CONSULTANTS" in small spaced capitals, a simple roofline icon above the letters in red, clean white background, flat vector style, high contrast, readable from 50 metres, no gradients, no photos, no 3D, centered layout, 3:1 horizontal format.
+```bash
+python scripts/make-icons.py
+```
 
-**B. Poora signboard / flex banner (3:1)**
-
-> Horizontal shop signboard design, 3:1, deep green background, large white text "PANDIT ESTATE", red ribbon with white text "SALE ✱ PURCHASE ✱ RENTING", below it a white line "DDA Plots · Society Flats · DDA Flats · SFS Flats · Commercial Plots · Land in L-Zone · Society Membership in L-Zone", bottom strip in white with large green phone numbers "+91 98110 93769 | +91 88517 91516" and small address "Plot No. 5, Sector 19, Dwarka, New Delhi 110075 (Near Vardhman Crown Mall)", owner name "Suresh Bhardwaj", clean flat vector layout, very legible, print-ready, no photos.
-
-**C. Square logo (social media profile)**
-
-> Square app-style logo, rounded green square, white bold letters "PE" with a red roofline above, flat vector, minimal.
-
-Maine ek taiyaar text logo aur signboard bhi bana diya hai: `public/branding/` folder dekho.
-
-## 6. Baad mein
-
-Images folder mein daalne ke baad page refresh karo. Agar kisi image ka size ya crop theek na lage to file ka naam
-bata dena, main crop adjust kar dunga.
+Isse site ka logo, favicon, app icons, office photo aur share image apne aap ban jate hain.
