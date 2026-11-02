@@ -284,7 +284,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 .map-card b{font-size:1rem}.map-card span{color:var(--mut)}
 
 /* footer: mid-tone slate with a faint grid, light text */
-.footer{background-color:#30353d;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:44px 44px;color:#cfd4db;margin-top:24px}
+.footer{background-color:#23262d;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:44px 44px;color:#cfd4db;margin-top:0}
 .fcta{max-width:1280px;margin:auto;padding:34px 5vw;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.14)}
 .fcta h3{font-size:1.35rem;color:#fff}.fcta p{color:#b5bcc7;margin-top:4px}
 .fcta-btns{display:flex;gap:10px;flex-wrap:wrap}
@@ -384,3 +384,39 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 .about-badges{gap:12px 18px}
 }
 .hero-cta,.deals,.hero-facts{width:100%}
+
+/* ===== v7 ===== */
+/* tinted bands (same soft grey as before) */
+.tint{max-width:none;background:#f3f3f0;padding:44px 5vw}
+.tint>*{max-width:1280px;margin-left:auto;margin-right:auto}
+.tint+.sec{padding-top:44px}
+.sec+.tint{margin-top:0}
+
+/* footer credit */
+.credit{display:flex;gap:6px;flex-wrap:wrap}
+.credit a{color:#fff;text-decoration:underline;text-underline-offset:3px}.credit a:hover{color:#ff8e9b}
+
+/* PANDIT ESTATE: bigger and bolder */
+.hero-wrap{max-width:1060px}.hero-copy{max-width:960px}
+.h-brand{font-size:clamp(2.2rem,6.8vw,5.1rem);font-weight:800;letter-spacing:.1em;padding-left:.1em;text-shadow:0 2px 0 rgba(0,0,0,.35),0 6px 26px rgba(0,0,0,.7),0 0 2px rgba(0,0,0,.6)}
+.h-brand .w{display:inline}.h-brand .w+.w::before{content:' '}
+.h-mid{font-size:clamp(1.6rem,4.8vw,2.8rem)}
+
+@media(max-width:720px){
+.sec{padding-top:30px}
+.tint{padding:30px 16px}
+.h-brand{white-space:normal;font-size:clamp(2.8rem,16.4vw,4.2rem);letter-spacing:.07em;padding-left:.07em;line-height:1.02}
+.h-brand .w{display:block}.h-brand .w+.w::before{content:none}
+.h-mid{font-size:clamp(1.55rem,6.8vw,2.1rem);margin-top:.3em}
+.h-hl{margin-top:.8em}
+/* footer: brand on top, Services + Quick Links side by side, contact below */
+.fgrid{grid-template-columns:1fr 1fr;gap:26px 18px;padding:32px 16px 10px}
+.fgrid>.fbrand{grid-column:1/-1}.fgrid>div:last-child{grid-column:1/-1}
+.footer a:not(.soc):not(.btn),.footer .fgrid p{font-size:.88rem;margin-bottom:8px}
+.fbar{flex-direction:column;gap:6px}.credit{font-size:.8rem}
+}
+.sec.tint{padding:44px 5vw}.sec.tint+.sec{padding-top:44px}
+@media(max-width:720px){.sec.tint{padding:30px 16px}.sec.tint+.sec{padding-top:30px}}
+.credit{gap:2px 18px;align-items:center}.credit-url{color:#aab1bc!important;text-decoration:none!important}.credit-url:hover{color:#fff!important}
+@media(max-width:720px){.credit{flex-direction:column;align-items:flex-start;gap:2px}}
+.gift{display:block;margin-bottom:10px}.refer{background:#fff}

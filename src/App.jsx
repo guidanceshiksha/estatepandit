@@ -212,7 +212,9 @@ function Hero() {
           <motion.p className="kicker" variants={fade}>{site.heroEyebrow}</motion.p>
           <motion.h1 variants={fade}>
             {site.heroTitle.split('\n').map((line, i, all) => (
-              <span key={i} className={i === 0 ? 'h-brand' : i === all.length - 1 ? 'h-hl' : 'h-mid'}>{line}</span>
+              <span key={i} className={i === 0 ? 'h-brand' : i === all.length - 1 ? 'h-hl' : 'h-mid'}>
+              {i === 0 ? line.split(' ').map((w, k) => <span key={k} className="w">{w}</span>) : line}
+            </span>
             ))}
           </motion.h1>
           <motion.p variants={fade} className="hero-sub">{site.heroSub}</motion.p>
@@ -301,7 +303,7 @@ function Listings() {
   const [saved, setSaved] = useState({})
   const items = properties.items.filter((p) => p.active !== false)
   return (
-    <section id="listings" className="sec">
+    <section id="listings" className="sec tint">
       <Title sub={properties.sub}>{properties.title}</Title>
       <Group className="grid g3">
         {items.map((p, i) => (
@@ -449,7 +451,7 @@ function Why() {
   const { why, reviews } = useContent()
   const enquire = useEnquiry()
   return (
-    <section className="sec why">
+    <section className="sec tint why">
       <Title sub={why.sub}>{why.title}</Title>
       <Group className="why-list">
         {why.items.map((w) => (
@@ -506,7 +508,7 @@ function Referral() {
   const { referral } = useContent()
   const enquire = useEnquiry()
   return (
-    <section id="refer" className="sec">
+    <section id="refer" className="sec tint">
       <Reveal className="refer">
         <div className="refer-l">
           <span className="gift"><Ic n="gift" size={26} /></span>
@@ -685,7 +687,7 @@ function FaqColumn({ title, icon, items }) {
 const FAQ = () => {
   const { faqs } = useContent()
   return (
-    <section className="sec">
+    <section className="sec tint">
       <Title sub={faqs.sub}>{faqs.title}</Title>
       <Reveal className="faq-grid">
         <FaqColumn title={faqs.siteTitle} icon="eye" items={faqs.site} />
@@ -817,7 +819,7 @@ function Footer() {
             ))}
           </div>
         </div>
-        <div><h4>Services</h4>{services.items.slice(0, 7).map((s) => <a key={s.title} href="/#services">{s.title}</a>)}</div>
+        <div><h4>Services</h4>{services.items.slice(0, 6).map((s) => <a key={s.title} href="/#services">{s.title}</a>)}</div>
         <div><h4>Quick Links</h4>{links.map(([l, h]) => <a key={l} href={h}>{l}</a>)}</div>
         <div>
           <h4>Visit Us</h4>
@@ -828,7 +830,10 @@ function Footer() {
           <a href={`mailto:${site.email}`}><Ic n="mail" size={16} /><span>{site.email}</span></a>
         </div>
       </div>
-      <div className="fbar"><span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span><span>Dwarka, New Delhi</span></div>
+      <div className="fbar">
+        <span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span>
+        <span className="credit"><span>Designed &amp; Developed by <a href="https://www.gypsumtechnology.com" target="_blank" rel="noopener noreferrer">Gypsum Technology Private Limited</a></span><a className="credit-url" href="https://www.gypsumtechnology.com" target="_blank" rel="noopener noreferrer">www.gypsumtechnology.com</a></span>
+      </div>
     </footer>
   )
 }
