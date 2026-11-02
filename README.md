@@ -51,3 +51,14 @@ Abhi admin login **band** hai (`/admin` seedha khulta hai). Login wapas chalu ka
 Abhi `/admin` **demo mode** mein hai: login box mein `admin` / `admin123` pehle se bhare rehte hain, bas "Sign in" dabao. Panel sample leads ke saath browser mein hi chalta hai, koi server ya database nahi chahiye, aur changes sirf us browser mein rehte hain.
 
 Asli server login aur database wala admin chahiye to build ke time environment variable `VITE_REAL_ADMIN=1` set karo (Vercel: Settings > Environment Variables) aur redeploy karo. Tab Upstash Redis aur `ADMIN_REQUIRE_LOGIN=1` bhi lagega (upar ke sections dekho).
+
+## Tests
+
+```bash
+node scripts/test/backend.test.mjs   # leads, admin login, content, uploads, SEO, rate limit (files and Redis)
+```
+
+## Photos to add
+
+`public/images/office.jpg` (office front, shown beside the map), `public/images/owner.jpg`, and the images listed in `docs/IMAGE-PROMPTS.md`.
+Logo, office photo, credit line, social links etc. can be changed from Admin > Settings once the real admin is switched on.

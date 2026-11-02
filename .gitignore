@@ -4,3 +4,4 @@ node_modules
 dist
 .claude/
 public/images/website image/
+.env*

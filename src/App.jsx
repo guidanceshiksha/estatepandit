@@ -699,13 +699,16 @@ const FAQ = () => {
 
 /* ---------- contact card + QR (scan to save contact) ---------- */
 const esc = (s) => String(s).replace(/([,;\\])/g, '\\$1')
-function buildVcard(site) {
+function buildVcard(site, full = true) {
   const [first, ...rest] = site.ownerName.split(' ')
+  const tel1 = (n) => n.replace(/\s/g, '')
   return [
-    'BEGIN:VCARD', 'VERSION:3.0', `N:${esc(rest.join(' '))};${esc(first)};;;`, `FN:${esc(site.ownerName)}`, `ORG:${esc(site.name)}`, 'TITLE:Property Consultant',
-    `TEL;TYPE=CELL,VOICE:${site.phone.replace(/\s/g, '')}`, site.phone2 && `TEL;TYPE=CELL:${site.phone2.replace(/\s/g, '')}`,
-    `EMAIL;TYPE=INTERNET:${site.email}`, `ADR;TYPE=WORK:;;${esc(site.address)};Dwarka;New Delhi;110075;India`,
-    `NOTE:${esc('Deals in ' + site.dealsIn.join(', '))}`, 'END:VCARD',
+    'BEGIN:VCARD', 'VERSION:3.0', `N:${esc(rest.join(' '))};${esc(first)};;;`, `FN:${esc(site.ownerName)}`, `ORG:${esc(site.name)}`,
+    full && 'TITLE:Property Consultant',
+    `TEL;TYPE=CELL:${tel1(site.phone)}`, site.phone2 && `TEL;TYPE=CELL:${tel1(site.phone2)}`,
+    `EMAIL:${site.email}`,
+    full && `ADR;TYPE=WORK:;;${esc(site.address)};Dwarka;New Delhi;110075;India`,
+    full && `NOTE:${esc('Deals in ' + site.dealsIn.join(', '))}`, 'END:VCARD',
   ].filter(Boolean).join('\r\n')
 }
 
@@ -715,10 +718,11 @@ function Contact() {
   const [sent, setSent] = useState(false)
   const [err, setErr] = useState(false)
   const lead = useLeadForm({ kind: 'contact', title: 'Contact form enquiry', source: 'Contact form' })
-  const vcard = buildVcard(site)
+  const vcard = buildVcard(site, true)
+  const qrText = buildVcard(site, false)
   useEffect(() => {
-    QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#1a1d23', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
-  }, [vcard])
+    QRCode.toString(qrText, { type: 'svg', margin: 2, errorCorrectionLevel: 'M', color: { dark: '#000000', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
+  }, [qrText])
   const download = () => {
     const url = URL.createObjectURL(new Blob([vcard], { type: 'text/vcard' }))
     const a = Object.assign(document.createElement('a'), { href: url, download: `${site.ownerName.replace(/\s+/g, '-')}-${site.name.replace(/\s+/g, '-')}.vcf` })
@@ -764,10 +768,13 @@ function Contact() {
             {err && <p className="err">Could not send right now. Please call us.</p>}
           </form>
         </Item>
-        <Item className="card cqr" lift={-3}>
-          <div className="qr" dangerouslySetInnerHTML={{ __html: svg }} />
-          <b>Scan to save our contact</b>
-          <small>Adds our numbers, email and address to your phone.</small>
+        <Item className="card cqr" lift={0}>
+          <h3>Save Our Contact</h3>
+          <div className="qrbox">
+            <i className="c1" /><i className="c2" /><i className="c3" /><i className="c4" />
+            <div className="qr" role="img" aria-label="QR code that adds our contact to your phone" dangerouslySetInnerHTML={{ __html: svg }} />
+          </div>
+          <ol className="qsteps"><li>Open your phone camera</li><li>Point it at the code</li><li>Tap <b>Add Contact</b></li></ol>
           <button className="btn ghost" onClick={download}><Ic n="download" size={16} /> Download vCard</button>
         </Item>
       </Group>
@@ -780,17 +787,21 @@ const MapSection = () => {
   const { site } = useContent()
   return (
     <section className="sec map-sec">
-      <Title sub={`Visit us at ${site.address}`}>Find Us on Google Maps</Title>
-      <Reveal className="map-wrap">
-        <iframe title="Pandit Estate on Google Maps" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps?q=${encodeURIComponent(site.mapQuery)}&output=embed`} />
-        <div className="map-card">
-          <GoogleG size={26} />
-          <b>{site.name}</b>
-          <span>{site.address}</span>
-          <a className="btn xs" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.mapQuery)}`} target="_blank" rel="noreferrer">Get Directions <Ic n="arrow" size={14} /></a>
-        </div>
-      </Reveal>
+      <Title sub={site.address}>Visit Our Office</Title>
+      <Group className="visit">
+        <Item className="office" lift={0}>
+          <div className="office-img"><Photo src={site.officeImage} alt={`${site.name} office, ${site.address}`} initials="OFFICE PHOTO" /></div>
+          <div className="office-cap"><b>{site.officeCaption}</b><span>{site.hours}</span></div>
+        </Item>
+        <Item className="mapbox" lift={0}>
+          <iframe title="Pandit Estate on Google Maps" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps?q=${encodeURIComponent(site.mapQuery)}&output=embed`} />
+          <div className="map-bar">
+            <span><GoogleG size={18} /> <b>{site.name}</b></span>
+            <a className="btn xs" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.mapQuery)}`} target="_blank" rel="noreferrer"><Ic n="directions" size={14} /> Get Directions</a>
+          </div>
+        </Item>
+      </Group>
     </section>
   )
 }
@@ -832,7 +843,12 @@ function Footer() {
       </div>
       <div className="fbar">
         <span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span>
-        <span className="credit"><span>Designed &amp; Developed by <a href="https://www.gypsumtechnology.com" target="_blank" rel="noopener noreferrer">Gypsum Technology Private Limited</a></span><a className="credit-url" href="https://www.gypsumtechnology.com" target="_blank" rel="noopener noreferrer">www.gypsumtechnology.com</a></span>
+        {site.creditName && (
+          <span className="credit">
+            <span>Designed &amp; Developed by <a href={site.creditUrl || undefined} target="_blank" rel="noopener noreferrer">{site.creditName}</a></span>
+            {site.creditUrl && <a className="credit-url" href={site.creditUrl} target="_blank" rel="noopener noreferrer">{site.creditUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}</a>}
+          </span>
+        )}
       </div>
     </footer>
   )

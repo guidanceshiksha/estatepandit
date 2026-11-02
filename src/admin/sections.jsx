@@ -117,6 +117,8 @@ export const SECTIONS = {
       T('whatsapp', 'WhatsApp number', { hint: 'Digits only with country code, e.g. 919811093769' }), T('email', 'Email'),
       A('address', 'Address', { rows: 2 }), T('mapQuery', 'Google Maps search text', { hint: 'Text typed into Google Maps to find your office.', wide: true }),
       T('hours', 'Working hours'), A('footerText', 'Footer description', { rows: 2 }),
+      I('officeImage', 'Office photo (shown beside the map)'), T('officeCaption', 'Office photo caption'),
+      T('creditName', 'Footer credit: company name'), T('creditUrl', 'Footer credit: website link', { placeholder: 'https://www.example.com' }),
     ],
   },
   social: {
