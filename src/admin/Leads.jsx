@@ -4,7 +4,7 @@ import { call, download } from './api.js'
 
 const STATUSES = [['new', 'New'], ['contacted', 'Contacted'], ['qualified', 'Qualified'], ['closed', 'Closed won'], ['lost', 'Lost'], ['partial', 'Incomplete']]
 const statusLabel = Object.fromEntries(STATUSES)
-const KIND_LABEL = { enquiry: 'Property enquiry', visit: 'Site visit', area: 'Area enquiry', service: 'Service enquiry', contact: 'Contact', search: 'Home search', callback: 'Callback' }
+const KIND_LABEL = { enquiry: 'Property enquiry', visit: 'Site visit', area: 'Area enquiry', service: 'Service enquiry', contact: 'Contact', search: 'Home search', callback: 'Callback', loan: 'Home loan', referral: 'Referral' }
 
 const fmt = (iso) => (iso ? new Date(iso).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '–')
 const ago = (iso) => {

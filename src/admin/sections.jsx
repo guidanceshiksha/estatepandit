@@ -53,7 +53,7 @@ export const SECTIONS = {
     fields: [
       T('eyebrow', 'Small label'), T('heading', 'Heading'), A('lead', 'Short intro', { rows: 2 }),
       T('ownerName', 'Name on photo'), T('ownerRole', 'Role on photo'), I('ownerPhoto', 'Owner photo'),
-      T('badge1', 'Floating badge 1'), T('badge2', 'Floating badge 2'), T('tilesTitle', 'Tiles heading'),
+      T('expValue', 'Experience number (e.g. 25+)'), T('expLabel', 'Experience label'), T('tilesTitle', 'Tiles heading'),
       arr('tiles', 'We deal in tiles', { titleKey: 'title', noun: 'tile', blank: { icon: 'home', title: '', sub: '' }, fields: [T('title', 'Title'), T('sub', 'Small text (optional)'), { k: 'icon', label: 'Icon', type: 'icon' }] }),
       { k: 'points', label: 'Check-list points', type: 'tags' },
     ],
@@ -81,7 +81,22 @@ export const SECTIONS = {
   },
   areas: {
     key: 'areas', title: 'Areas We Serve', desc: 'Each area becomes a button that opens the enquiry form.', link: '/#home',
-    fields: [T('title', 'Heading'), T('sub', 'Sub heading'), { k: 'items', label: 'Areas', type: 'tags', rows: 10 }],
+    fields: [T('title', 'Heading'), T('sub', 'Sub heading'), T('dwarkaTitle', 'Dwarka group title'), { k: 'items', label: 'Dwarka areas / sectors', type: 'tags', rows: 12 }, T('ncrTitle', 'Delhi NCR group title'), { k: 'ncr', label: 'Delhi NCR areas', type: 'tags', rows: 8 }],
+  },
+  loans: {
+    key: 'loans', title: 'Home Loan Section', desc: 'Bank loan assistance block. Upload the official logo of each bank; without a logo the bank name is shown.', link: '/#loans',
+    fields: [
+      T('eyebrow', 'Small label'), T('title', 'Heading', { wide: true }), A('sub', 'Sub heading', { rows: 2 }), T('cta', 'Button text'), T('bankTitle', 'Banks heading'), T('note', 'Small note under banks', { wide: true }),
+      arr('steps', 'Steps', { titleKey: 'title', noun: 'step', blank: { icon: 'check', title: '', text: '' }, fields: [T('title', 'Title'), T('text', 'Short text'), { k: 'icon', label: 'Icon', type: 'icon' }] }),
+      arr('banks', 'Banks', { titleKey: 'name', noun: 'bank', blank: { name: '', full: '', logo: '' }, fields: [T('name', 'Short name'), T('full', 'Full name'), I('logo', 'Official logo (optional)')] }),
+    ],
+  },
+  referral: {
+    key: 'referral', title: 'Refer & Earn', desc: 'The commission / reward block. No amounts are shown on the website.', link: '/#refer',
+    fields: [
+      T('eyebrow', 'Small label'), T('title', 'Heading', { wide: true }), A('sub', 'Text', { rows: 3 }), T('cta', 'Button text'), T('note', 'Small note', { wide: true }),
+      arr('steps', 'Steps', { titleKey: 'title', noun: 'step', blank: { icon: 'check', title: '', text: '' }, fields: [T('title', 'Title'), A('text', 'Short text', { rows: 2 }), { k: 'icon', label: 'Icon', type: 'icon' }] }),
+    ],
   },
   partners: {
     key: 'partners', title: 'Partner Logos', desc: 'The scrolling strip. Upload a logo or leave it empty to show the name as text.', link: '/#home',

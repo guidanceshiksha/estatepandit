@@ -45,10 +45,10 @@ const GoogleWord = () => (
 )
 const Stars = ({ n = 5 }) => <span className="gstars" aria-label={`${n} out of 5`}>{'★'.repeat(n)}{'☆'.repeat(5 - n)}</span>
 
-function Photo({ src, alt, className = 'bld' }) {
+function Photo({ src, alt, className = 'bld', initials }) {
   const [bad, setBad] = useState(false)
   useEffect(() => setBad(false), [src])
-  if (!src || bad) return <div className={`${className} noimg`} role="img" aria-label={alt} />
+  if (!src || bad) return <div className={`${className} noimg`} role="img" aria-label={alt}>{initials && <span className="initials">{initials}</span>}</div>
   return <img className={className} src={src} alt={alt} loading="lazy" onError={() => setBad(true)} />
 }
 
@@ -209,7 +209,9 @@ function Hero() {
       <motion.div className="hero-in" initial="hidden" animate="show" variants={stagger}>
         <motion.span className="eyebrow light" variants={fade}>{site.heroEyebrow}</motion.span>
         <motion.h1 variants={fade}>
-          {site.heroTitle.split('\n').map((line, i) => (i === 0 ? <span key={i}>{line}</span> : <span key={i} className="hl"><br />{line}</span>))}
+          {site.heroTitle.split('\n').map((line, i, all) => (
+            <span key={i} className={i === 0 ? 'h-brand' : i === all.length - 1 ? 'h-hl' : 'h-mid'}>{line}</span>
+          ))}
         </motion.h1>
         <motion.p variants={fade} className="hero-sub">{site.heroSub}</motion.p>
         <motion.div variants={fade} className="hero-cta">
@@ -255,7 +257,15 @@ function Hero() {
     </section>
   )
 }
-const AreaOptions = () => useContent().areas.items.map((a) => <option key={a}>{a}</option>)
+const AreaOptions = () => {
+  const { areas } = useContent()
+  return (
+    <>
+      <optgroup label="Dwarka">{areas.items.map((a) => <option key={a}>{a.startsWith('Sector') ? `${a}, Dwarka` : a}</option>)}</optgroup>
+      <optgroup label="Delhi NCR">{(areas.ncr || []).map((a) => <option key={a}>{a}</option>)}</optgroup>
+    </>
+  )
+}
 
 /* ---------- services ---------- */
 function Services() {
@@ -264,7 +274,7 @@ function Services() {
   return (
     <section id="services" className="sec">
       <Title sub={services.sub}>{services.title}</Title>
-      <Group className="grid g4">
+      <Group className="grid g5">
         {services.items.map((s) => (
           <Item key={s.title} className="card scard">
             <div className="simg">
@@ -331,16 +341,15 @@ function About() {
       <div className="about">
         <Reveal className="about-img">
           <div className="portrait">
-            <Photo src={a.ownerPhoto} alt={a.ownerName} className="pimg" />
+            <Photo src={a.ownerPhoto} alt={a.ownerName} className="pimg" initials={a.ownerName.split(' ').map((w) => w[0]).join('').slice(0, 2)} />
             <div className="pcap"><b>{a.ownerName}</b><span>{a.ownerRole}</span></div>
           </div>
-          {a.badge1 && <motion.div className="fbadge b1" animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 4 }}><GoogleG size={16} /> {a.badge1}</motion.div>}
-          {a.badge2 && <motion.div className="fbadge b2" animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 5 }}><Ic n="key" size={16} /> {a.badge2}</motion.div>}
         </Reveal>
         <Reveal className="about-txt">
           <span className="eyebrow">{a.eyebrow}</span>
           <h2>{a.heading}</h2>
           <p className="lead">{a.lead}</p>
+          {a.expValue && <div className="exp"><b>{a.expValue}</b><span>{a.expLabel}</span></div>}
           <div className="ribbon">SALE <i>✱</i> PURCHASE <i>✱</i> RENTING</div>
           <h4 className="mini">{a.tilesTitle}</h4>
           <div className="tiles">
@@ -469,6 +478,68 @@ function Why() {
   )
 }
 
+/* ---------- bank loan assistance ---------- */
+function Loans() {
+  const { loans } = useContent()
+  const enquire = useEnquiry()
+  return (
+    <section id="loans" className="sec loans-sec">
+      <Reveal className="loans">
+        <div className="loans-l">
+          <span className="eyebrow light">{loans.eyebrow}</span>
+          <h2>{loans.title}</h2>
+          <p>{loans.sub}</p>
+          <ol className="lsteps">
+            {loans.steps.map((st, i) => (
+              <li key={st.title}><span className="lnum">{i + 1}</span><div><b>{st.title}</b><small>{st.text}</small></div></li>
+            ))}
+          </ol>
+          <button className="btn coral" onClick={() => enquire({ title: 'Home loan assistance', need: 'Home loan', source: 'Home loan section', kind: 'loan' })}>{loans.cta} <Ic n="arrow" size={16} /></button>
+        </div>
+        <div className="loans-r">
+          <h3><Ic n="bank" size={20} /> {loans.bankTitle}</h3>
+          <Group className="banks">
+            {loans.banks.map((b) => (
+              <Item key={b.name} className="bank" lift={-4}>
+                {b.logo ? <img src={b.logo} alt={b.full || b.name} /> : <><span className="bank-ic"><Ic n="bank" size={20} /></span><b>{b.name}</b><small>{b.full}</small></>}
+              </Item>
+            ))}
+          </Group>
+          <p className="lnote">{loans.note}</p>
+        </div>
+      </Reveal>
+    </section>
+  )
+}
+
+/* ---------- referral / commission ---------- */
+function Referral() {
+  const { referral } = useContent()
+  const enquire = useEnquiry()
+  return (
+    <section id="refer" className="sec refer-sec">
+      <Reveal className="refer">
+        <div className="refer-l">
+          <span className="gift"><Ic n="gift" size={30} /></span>
+          <span className="eyebrow">{referral.eyebrow}</span>
+          <h2>{referral.title}</h2>
+          <p>{referral.sub}</p>
+          <button className="btn coral" onClick={() => enquire({ title: 'Refer a client', need: 'Refer a client', source: 'Refer & Earn section', kind: 'referral' })}>{referral.cta} <Ic n="arrow" size={16} /></button>
+          <small className="rnote">{referral.note}</small>
+        </div>
+        <ol className="rsteps">
+          {referral.steps.map((st, i) => (
+            <li key={st.title}>
+              <span className="ric"><Ic n={st.icon} size={22} /></span>
+              <div><em>Step {i + 1}</em><b>{st.title}</b><p>{st.text}</p></div>
+            </li>
+          ))}
+        </ol>
+      </Reveal>
+    </section>
+  )
+}
+
 /* ---------- partners ---------- */
 function Partners() {
   const { partners } = useContent()
@@ -486,16 +557,22 @@ function Partners() {
 function Areas() {
   const { areas } = useContent()
   const enquire = useEnquiry()
+  const chip = (a, label) => (
+    <Item key={a} className="chip-wrap" lift={-3}>
+      <button className="chip" onClick={() => enquire({ title: `Properties in ${label}`, need: 'Buy', source: `Area: ${label}`, kind: 'area' })}><Ic n="pin" size={14} /> {a}</button>
+    </Item>
+  )
   return (
     <section className="sec">
       <Title sub={areas.sub}>{areas.title}</Title>
-      <Group className="areas">
-        {areas.items.map((a) => (
-          <Item key={a} className="chip-wrap" lift={-3}>
-            <button className="chip" onClick={() => enquire({ title: `Properties in ${a}`, need: 'Buy', source: `Area: ${a}`, kind: 'area' })}><Ic n="pin" size={15} /> {a}</button>
-          </Item>
-        ))}
-      </Group>
+      <h3 className="agroup">{areas.dwarkaTitle}</h3>
+      <Group className="areas">{areas.items.map((a) => chip(a, a.startsWith('Sector') ? `${a}, Dwarka` : a))}</Group>
+      {areas.ncr?.length > 0 && (
+        <>
+          <h3 className="agroup">{areas.ncrTitle}</h3>
+          <Group className="areas">{areas.ncr.map((a) => chip(a, a))}</Group>
+        </>
+      )}
     </section>
   )
 }
@@ -558,6 +635,21 @@ function PostPage({ slug }) {
         <small className="bmeta">{post.readTime} · {fmtDate(post.date)} · By {site.name}</small>
         <div className="post-img"><Photo src={post.image} alt={post.title} /></div>
         <div className="post-body"><Markdown text={post.body} /></div>
+        {post.sources?.length > 0 && (
+          <aside className="sources">
+            <h3>Sources</h3>
+            <ol>{post.sources.map(([name, link]) => <li key={link}><a href={link} target="_blank" rel="noreferrer noopener nofollow">{name}</a></li>)}</ol>
+          </aside>
+        )}
+        <div className="author">
+          <span className="av-lg">{site.ownerName.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>
+          <div><b>{site.ownerName}</b><small>Founder, {site.name} · 25+ years in Dwarka property</small></div>
+          <div className="share">
+            <a href={`https://wa.me/?text=${encodeURIComponent(post.title + ' ' + (typeof location !== 'undefined' ? location.href : ''))}`} target="_blank" rel="noreferrer" aria-label="Share on WhatsApp"><Social name="whatsapp" size={18} /></a>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof location !== 'undefined' ? location.href : '')}`} target="_blank" rel="noreferrer" aria-label="Share on Facebook"><Social name="facebook" size={18} /></a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof location !== 'undefined' ? location.href : '')}`} target="_blank" rel="noreferrer" aria-label="Share on LinkedIn"><Social name="linkedin" size={18} /></a>
+          </div>
+        </div>
         <div className="post-cta">
           <div><b>Looking for a property in Dwarka?</b><span>Talk to our team for verified options and honest advice.</span></div>
           <button className="btn gold" onClick={() => enquire({ title: `Enquiry from article: ${post.title}`, source: `Blog: ${post.title}` })}>Request a Callback</button>
@@ -621,7 +713,7 @@ function Contact() {
   const [svg, setSvg] = useState('')
   const vcard = buildVcard(site)
   useEffect(() => {
-    QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#0a1f55', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
+    QRCode.toString(vcard, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#07423c', light: '#ffffff' } }).then(setSvg).catch(() => setSvg(''))
   }, [vcard])
   const download = () => {
     const url = URL.createObjectURL(new Blob([vcard], { type: 'text/vcard' }))
@@ -797,7 +889,7 @@ export default function App({ page = 'home', slug = '' }) {
       <motion.div className="progress" style={{ scaleX: w }} />
       <Nav />
       {page === 'blog' ? <BlogPage /> : page === 'post' ? <PostPage slug={slug} /> : (
-        <><Hero /><About /><Services /><Listings /><Stats /><Testimonials /><Why /><Partners /><Areas /><Blog /><FAQ /><Contact /><MapSection /></>
+        <><Hero /><About /><Services /><Listings /><Stats /><Testimonials /><Why /><Loans /><Referral /><Partners /><Areas /><Blog /><FAQ /><Contact /><MapSection /></>
       )}
       <Footer />
       <Floaters />

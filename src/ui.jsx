@@ -6,17 +6,17 @@ export function Logo({ dark = false, size = 44 }) {
       <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden>
         <defs>
           <linearGradient id="lg-bg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#2f6bff" /><stop offset="1" stopColor="#0a1f55" />
+            <stop offset="0" stopColor="#14b8a6" /><stop offset="1" stopColor="#07423c" />
           </linearGradient>
           <linearGradient id="lg-gold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#ffe29a" /><stop offset="1" stopColor="#e0a21b" />
+            <stop offset="0" stopColor="#ffb59d" /><stop offset="1" stopColor="#f0502e" />
           </linearGradient>
         </defs>
         <rect x="2" y="2" width="52" height="52" rx="15" fill="url(#lg-bg)" />
         <path d="M10 25 28 10l18 15" fill="none" stroke="url(#lg-gold)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
         <rect x="19" y="27" width="4" height="13" rx="1" fill="#ffffff55" />
         <rect x="33" y="29" width="4" height="11" rx="1" fill="#ffffff55" />
-        <text x="28" y="43.5" textAnchor="middle" fontFamily="'Playfair Display',serif" fontWeight="700" fontSize="19" fill="#fff">PE</text>
+        <text x="28" y="43.5" textAnchor="middle" fontFamily="Poppins, Arial, sans-serif" fontWeight="800" fontSize="18" fill="#fff">PE</text>
         <rect x="14" y="46" width="28" height="2.2" rx="1.1" fill="url(#lg-gold)" />
       </svg>
       <span className="brand-txt">
@@ -41,6 +41,10 @@ const P = {
   badge: <><circle cx="12" cy="8" r="6" /><path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11" /></>,
   plot: <><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z" /><path d="M9 3v15M15 6v15" /></>,
   clock: <><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></>,
+  bank: <><path d="M3 21h18M5 21V10M9 21V10M15 21V10M19 21V10M2 10l10-7 10 7z" /></>,
+  gift: <><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13M5 12v9h14v-9M7.5 8a2.5 2.5 0 1 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 1 1 0 5" /></>,
+  users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
+  file: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" /></>,
   arrow: <path d="M5 12h14M12 5l7 7-7 7" />,
   download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5M12 15V3" /></>,
 }

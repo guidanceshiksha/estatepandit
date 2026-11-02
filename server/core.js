@@ -4,7 +4,7 @@ import crypto from 'node:crypto'
 import { defaults } from '../src/data.js'
 
 const STATUSES = ['partial', 'new', 'contacted', 'qualified', 'closed', 'lost']
-const KINDS = ['enquiry', 'visit', 'area', 'service', 'contact', 'search', 'callback']
+const KINDS = ['enquiry', 'visit', 'area', 'service', 'contact', 'search', 'callback', 'loan', 'referral']
 const CONTENT_KEYS = Object.keys(defaults)
 const DEMO = { user: 'admin', pass: 'admin123' }
 // For now the admin panel is open (no login). Set ADMIN_REQUIRE_LOGIN=1 on the host to turn the login back on.

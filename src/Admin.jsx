@@ -13,7 +13,7 @@ import './admin.css'
 const NAV = [
   { id: 'dashboard', label: 'Dashboard', icon: 'building' },
   { group: 'leads', label: 'Leads', icon: 'phone', items: [['leads', 'All Leads'], ['visits', 'Visit Bookings'], ['partial', 'Incomplete Forms']] },
-  { group: 'website', label: 'Website Content', icon: 'home', items: [['home', 'Hero & Home'], ['services', 'Services'], ['properties', 'Properties'], ['about', 'About Us'], ['track', 'Track Record'], ['reviews', 'Google Reviews'], ['why', 'Why Choose Us'], ['areas', 'Areas We Serve'], ['partners', 'Partner Logos'], ['faqs', 'FAQs']] },
+  { group: 'website', label: 'Website Content', icon: 'home', items: [['home', 'Hero & Home'], ['services', 'Services'], ['properties', 'Properties'], ['about', 'About Us'], ['track', 'Track Record'], ['reviews', 'Google Reviews'], ['why', 'Why Choose Us'], ['areas', 'Areas We Serve'], ['loans', 'Home Loan Section'], ['referral', 'Refer & Earn'], ['partners', 'Partner Logos'], ['faqs', 'FAQs']] },
   { group: 'blog', label: 'Blog', icon: 'eye', items: [['blog-all', 'All Posts'], ['blog-new', 'New Post'], ['blog-settings', 'Blog Page Text']] },
   { group: 'seo', label: 'SEO', icon: 'badge', items: [['seo', 'Site SEO']] },
   { group: 'settings', label: 'Settings', icon: 'shield', items: [['business', 'Business & Contact'], ['social', 'Social Links'], ['account', 'Account & Login'], ['backup', 'Backup & SEO Files']] },

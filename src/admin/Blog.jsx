@@ -14,6 +14,7 @@ const FIELDS = [
   { k: 'excerpt', label: 'Short summary (shown on cards)', type: 'textarea', rows: 2 },
   { k: 'image', label: 'Cover photo', type: 'image' },
   { k: 'body', label: 'Article', type: 'textarea', rows: 16, hint: 'Use "## Heading" for sections, "- item" for bullet lists and **bold** for emphasis. Leave a blank line between paragraphs.' },
+  { k: 'sourcesText', label: 'Sources (one per line: Name | https://link)', type: 'tags', rows: 5, hint: 'Shown at the end of the article. Also mention the source in the paragraph.' },
   { k: 'published', label: 'Status', type: 'bool', on: 'Published', off: 'Draft (hidden)' },
 ]
 const SEO_FIELDS = [
@@ -96,7 +97,11 @@ export function BlogManager({ startNew }) {
             {post.published && post.slug && <a className="abtn alt sm" href={`/blog/${post.slug}`} target="_blank" rel="noreferrer">View live ↗</a>}
           </div>
         </div>
-        <ObjectForm fields={FIELDS} value={post} token={token} onChange={(p) => setPost(p.title !== post.title && (!post.slug || post.slug === slugify(post.title)) ? { ...p, slug: slugify(p.title) } : p)} />
+        <ObjectForm fields={FIELDS} value={{ ...post, sourcesText: (post.sources || []).map((x) => x.join(' | ')) }} token={token} onChange={({ sourcesText, ...p }) => {
+          const sources = (sourcesText || []).map((l) => l.split('|').map((t) => t.trim())).filter((x) => x.length >= 2 && x[0] && x[1])
+          const next = { ...p, sources: sourcesText ? (sourcesText.some((l) => l.includes('|')) || sourcesText.length === 0 ? sources : post.sources) : post.sources }
+          setPost(next.title !== post.title && (!post.slug || post.slug === slugify(post.title)) ? { ...next, slug: slugify(next.title) } : next)
+        }} />
         <h3 className="sub-h">SEO</h3>
         <div className="seo-grid">
           <div><ObjectForm fields={SEO_FIELDS} value={post} token={token} onChange={setPost} /></div>
