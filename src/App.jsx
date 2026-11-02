@@ -206,7 +206,7 @@ function Hero() {
             transition={{ opacity: { duration: 1.2 }, scale: { duration: 8, ease: 'linear' } }} />
         </AnimatePresence>
       </div>
-      <div className="hero-fade" aria-hidden />
+      <div className="hero-shade" aria-hidden />
       <div className="hero-wrap">
         <motion.div className="hero-copy" initial="hidden" animate="show" variants={stagger}>
           <motion.p className="kicker" variants={fade}>{site.heroEyebrow}</motion.p>
@@ -249,7 +249,7 @@ function Hero() {
             {sold && <span><b>{Number(sold.value).toLocaleString('en-IN')}{sold.suffix}</b> {sold.label.toLowerCase()}</span>}
           </motion.p>
           <motion.p variants={fade} className="deals">
-            <em>We deal in</em>{site.dealsIn.map((d) => <a key={d} href="#listings" className="deal">{d}</a>)}
+            <em>We deal in</em>{site.dealsIn.slice(0, 4).map((d) => <a key={d} href="#listings" className="deal">{d}</a>)}
           </motion.p>
         </motion.div>
       </div>
@@ -350,8 +350,10 @@ function About() {
           <span className="eyebrow">{a.eyebrow}</span>
           <h2>{a.heading}</h2>
           <p className="lead">{a.lead}</p>
-          {a.expValue && <div className="exp"><b>{a.expValue}</b><span>{a.expLabel}</span></div>}
-          <div className="ribbon">SALE <i>✱</i> PURCHASE <i>✱</i> RENTING</div>
+          <div className="about-badges">
+            {a.expValue && <div className="exp"><b>{a.expValue}</b><span>{a.expLabel}</span></div>}
+            <div className="ribbon">SALE <i>✱</i> PURCHASE <i>✱</i> RENTING</div>
+          </div>
           <h4 className="mini">{a.tilesTitle}</h4>
           <div className="tiles">
             {a.tiles.map((t) => (
@@ -807,7 +809,7 @@ function Footer() {
       </div>
       <div className="fgrid">
         <div className="fbrand">
-          <Logo size={46} />
+          <Logo dark size={46} />
           <p>{site.footerText}</p>
           <div className="socials">
             {socials.map(([n, label, href]) => (

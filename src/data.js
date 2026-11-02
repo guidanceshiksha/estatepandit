@@ -20,7 +20,7 @@ export const defaults = {
     heroTitle: 'PANDIT ESTATE\nYour Trusted Dwarka\nProperty Partner',
     heroSub: 'DDA flats, society flats, plots and rentals in Dwarka, with 25+ years of local experience.',
     heroSlides: ['/images/hero/hero-1.jpg', '/images/hero/hero-2.jpg', '/images/hero/hero-3.jpg', '/images/hero/hero-4.jpg'],
-    dealsIn: ['DDA Plots', 'Society Flats', 'DDA Flats', 'SFS Flats', 'Commercial Plots', 'Land in L-Zone', 'L-Zone Membership'],
+    dealsIn: ['DDA Flats', 'Society Flats', 'Commercial Plots', 'Land in L-Zone', 'DDA Plots', 'SFS Flats', 'L-Zone Membership'],
     propertyTypes: ['DDA Flat', 'SFS Flat', 'Society Flat', 'DDA Plot', 'Residential Plot', 'Commercial Plot', 'Land in L-Zone', 'Society Membership (L-Zone)', 'Apartment / Flat', 'Builder Floor', 'Independent House / Villa', 'Penthouse', 'Studio Apartment', 'Commercial Shop', 'Office Space', 'Showroom', 'Warehouse / Godown', 'PG / Co-living', 'Farmhouse'],
     budgets: ['Under ₹25 Lac', '₹25 – 50 Lac', '₹50 Lac – 1 Cr', '₹1 – 2 Cr', '₹2 – 5 Cr', '₹5 Cr+'],
     ownerName: 'Suresh Bhardwaj',
