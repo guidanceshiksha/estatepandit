@@ -34,7 +34,7 @@ export const defaults = {
     officeImage: '/images/office.jpg',
     officeCaption: 'Our office, Sector 19, Dwarka',
     creditName: 'GIPSM Technology India Private Limited',
-    creditUrl: 'https://www.gypsumtechnology.com',
+    creditUrl: 'https://www.gipsmtechnology.com',
     footerText: 'DDA plots and flats, society flats, SFS flats, commercial plots and land in L-Zone. Sale, purchase and renting in Dwarka.',
     facebook: '', instagram: '', youtube: '', linkedin: '',
   },
